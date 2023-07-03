@@ -9,10 +9,10 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
-	<!-- bean 객체로 등록하기 -->
+	<!-- bean 객체로 등록하기 (MI, 2023/06/30) -->
 	<context:component-scan base-package="com.mimi"></context:component-scan>
 	
-	<!-- hikari를 사용하기 위해서 ~ -->
+	<!-- hikari를 사용하기 위해서 (MI, 2023/06/30) -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl"></property>
@@ -20,15 +20,28 @@
 		<property name="password" value="1234">	</property>
 	</bean>
 	
-	<!-- ref = 객체 -->
+	<!-- ref = 객체 (MI, 2023/06/30)-->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 	  <constructor-arg ref="hikariConfig"></constructor-arg>
 	</bean>
 	
-	<!-- mybatis를 사용하기 위해서 ~ -->
+	<!-- mybatis를 사용하기 위함 (MI, 2023/06/30) -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
 	<mybatis-spring:scan base-package="com.mimi.mapper"/>
+
+	<!-- 파일 첨부를 하기 위함 (MI, 2023/07/03) -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	    <property name="defaultEncoding" value="utf-8"></property>
+	    <!-- 1024 * 1024 * 10 bytes  10MB -->
+	    <property name="maxUploadSize" value="104857560"></property>
+	    <!-- 1024 * 1024 * 2 bytes  2MB -->
+	    <property name="maxUploadSizePerFile" value="2097152"></property>
+	    <property name="uploadTempDir" value ="file:/C:/upload/tmp"></property>
+	    <property name="maxInMemorySize" value="10485756"></property>
+	</bean>
+
+
 </beans>

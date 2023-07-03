@@ -5,7 +5,7 @@
 <!-- 매퍼의 경로를 지정 -->
 <mapper namespace="com.mimi.mapper.SampleMapper">
 
-	<!-- select 태그를 이용하여 쿼리문 작성 / id = 메소드명 -->
+	<!-- select 태그를 이용하여 쿼리문 작성 / id = 메소드명 , resultType = 타입 (기본형은 그냥 적음, 내가 만든 타입은 패키지까지 적어줘야함)-->
 	<select id="getTime2" resultType="String">
 		select sysdate || ' xml 파일 연동 ~~~' from dual
 	</select>	

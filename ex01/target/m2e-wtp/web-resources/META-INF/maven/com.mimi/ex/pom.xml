@@ -34,7 +34,7 @@
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 		
-		<!-- 한글 처리 코드 추가 (MI, 2023-06-30) -->
+		<!-- 한글 처리 코드 추가 (MI, 2023/06/30) -->
     	<!-- <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> -->
     	
 	</properties>
@@ -118,12 +118,12 @@
 		</dependency>
 				
 		<!-- Servlet -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
@@ -135,6 +135,14 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<!-- Service 호출을 위해 추가 (MI, 2023/07/03) -->
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.1.0</version>
+		    <scope>provided</scope>
+		</dependency>
 	
 		<!-- Test -->
 		<dependency>
@@ -144,7 +152,7 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- ojdbc8 추가 (MI, 2023-06-30) -->
+		<!-- ojdbc8 추가 (MI, 2023/06/30) -->
 		<!-- https://mvnrepository.com/artifact/com.oracle.ojdbc/ojdbc8 -->
 		<dependency>
 		    <groupId>com.oracle.ojdbc</groupId>
@@ -152,7 +160,7 @@
 		    <version>19.3.0.0</version>
 		</dependency>
 		
-		<!-- orai18n 추가 (MI, 2023-06-30) -->
+		<!-- orai18n 추가 (MI, 2023/06/30) -->
 		<!-- https://mvnrepository.com/artifact/com.oracle.ojdbc/orai18n -->
 		<dependency>
 		    <groupId>com.oracle.ojdbc</groupId>
@@ -160,7 +168,7 @@
 		    <version>19.3.0.0</version>
 		</dependency>
 		
-		<!-- lombok 추가 (MI, 2023-06-30) -->
+		<!-- lombok 추가 (MI, 2023/06/30) -->
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 		    <groupId>org.projectlombok</groupId>
@@ -169,21 +177,21 @@
 		    <scope>provided</scope>
 		</dependency>
 		
-		<!-- spring-test 추가 (MI, 2023-06-30) -->
+		<!-- spring-test 추가 (MI, 2023/06/30) -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
 		
-		<!-- HikariCP 추가 (MI, 2023-06-30) -->
+		<!-- HikariCP 추가 (MI, 2023/06/30) -->
 		<dependency>
 		   <groupId>com.zaxxer</groupId>
 		   <artifactId>HikariCP</artifactId>
 		   <version>4.0.3</version>
 		</dependency>
 		
-		<!-- mybatis 관련 추가 (MI, 2023-06-30) -->
+		<!-- mybatis 관련 추가 (MI, 2023/06/30) -->
 		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
 		<dependency>
 		    <groupId>org.mybatis</groupId>
@@ -207,7 +215,7 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 		
-		<!-- 쿼리 및 실행 결과 출력 관련 추가 (MI, 2023-06-30) -->
+		<!-- 쿼리 및 실행 결과 출력 관련 추가 (MI, 2023/06/30) * 이건 별도의 파일도 추가해야함  : log4jdbc.log4j2.properties-->
 		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
 		<dependency>
 		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
@@ -215,6 +223,25 @@
 		    <version>1.16</version>
 		</dependency>
 		
+		<!-- json 형식 파싱을 위해 추가 (MI, 2023/07/03) -->
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.15.2</version>
+		</dependency>
+		
+		<!-- 파일 업로드를 위해 추가 (MI, 2023/07/03) -->
+		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.5</version>
+		</dependency>
+		
+		
+		
+				
 		
 	</dependencies>
 	
@@ -246,7 +273,7 @@
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                     
-                    <!-- 한글 처리 코드 추가 (MI, 2023-06-30) -->
+                    <!-- 한글 처리 코드 추가 (MI, 2023/06/30) -->
                     <!-- <encoding>UTF-8</encoding> -->
                 </configuration>
             </plugin>

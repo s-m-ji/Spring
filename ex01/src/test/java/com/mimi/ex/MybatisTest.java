@@ -10,7 +10,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mimi.mapper.SampleMapper;
 
+// 스프링 실행
 @RunWith(SpringJUnit4ClassRunner.class)
+// 설정파일 경로안내
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
 public class MybatisTest {
 	
@@ -19,6 +21,8 @@ public class MybatisTest {
 	
 	@Test
 	public void test() {
+		// 테스트 할 때는 우선 null 여부를 체크하는게 좋음
+		assertNotNull(smplMapper);
 		System.out.println("********** [smplMapper] : " + smplMapper);
 		
 		String time = smplMapper.getTime();
