@@ -22,6 +22,13 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
+		
+		<!-- 404같은 WAS 내부 예외를 처리하기 위한 설정 (MI, 2023/07/04) -->
+		<init-param>
+			<param-name>throwExceptionIfNoHandlerFound</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 		
@@ -34,25 +41,35 @@
 	
 	<!-- 한글 인코딩 필터 처리 -->
     <filter>
-	<filter-name>encodingFilter</filter-name>
-    <filter-class>
-    	org.springframework.web.filter.CharacterEncodingFilter
-	</filter-class>
-
-	<init-param>
-		<param-name>encoding</param-name>
-		<param-value>UTF-8</param-value>
-    </init-param>
-
-	<init-param>
-		<param-name>forceEncoding</param-name>
-		<param-value>true</param-value>
-	</init-param>
-</filter>
-
-<filter-mapping>
-	<filter-name>encodingFilter</filter-name>
-	<url-pattern>/*</url-pattern>
-</filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+	    <filter-class>
+	    	org.springframework.web.filter.CharacterEncodingFilter
+		</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+	    </init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- <filter>
+	    <filter-name>SetCharacterEncodingFilter</filter-name>
+	    <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+	    <init-param>
+	    	<param-name>encoding</param-name>
+	    	<param-value>UTF-8</param-value>
+	    </init-param>
+	</filter>
+	<filter-mapping>
+	    <filter-name>SetCharacterEncodingFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping> -->
 
 </web-app>

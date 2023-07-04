@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mimi.mapper.BoardMapper">
+	<!-- 
+		▶▶▶  select 태그 작성
+				id : mapper의 메소드명
+		resultType : 기본 타입, 객체타입(select 쿼리의 결과를 특정 클래스의 객체로 저장)
+					쿼리 실행 결과를 resultType의 속성에 저장
+
+			 CDATA : 파서가 마크업이 아닌 문자로만 해석할 수 있도록 처리
+			 		 XML에서 부등호를 사용하기 위해 씀
+			 		 	
+		참고로  select에서 resultType은 꼭 써줘야함.
+		insert, upadte와 같은 경우 모두 결과 타입이 int이므로  resultType 필요없음 
+	-->
+	<select id="getListXml" resultType="com.mimi.vo.BoardVO">
+		<![CDATA[ SELECT * FROM tbl_board WHERE bno > 0 ORDER BY bno DESC]]>
+	<!-- 
+		사실 이렇게 bno > 0 처럼 꺽쇠괄호가 들어가면 
+		태그 기호의 일부로 인식하여 파싱 오류 가능성도 있기 때문에 <![CDATA[ ]]> 이 처리를 함 
+		-->
+	</select>
+	<!-- 
+		▶▶▶ 동적 쿼리 작성
+		MyBatis는 내부적으로 preparedStatement를 활용함.
+		
+		? -> #{속성} *매개변수의 속성 값 (즉, BoardVO의 필드)
+		
+		쿼리 작성 시 필요한 정보는 메소즈의 매개변수를 통해 받아올 수 있음.
+	 -->
+	<insert id="insert">
+		INSERT INTO tbl_board (bno, title, content, writer) VALUES (
+  			seq_board.NEXTVAL, #{title} , #{content} , #{writer}
+  		 )
+	</insert>
+	<!-- 
+		▶▶▶  selectKey 
+		생성된 시퀀스 값을 VO 객체의 속성에 저장 후 사용.
+		
+		keyProperty : VO의 필드명과 동일해야함 
+			  order : insert 구문 실행 전 호출
+		 resultType : VO 필드의 데이터 타입과 동일해야함
+			
+		* 게시글 작성 후 해당 글을 바로 확인하고 싶을 때  활용하면 좋다구 ~
+	-->
+	<insert id="insertSelectKey">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="int"> 
+			SELECT seq_board.NEXTVAL from dual
+		</selectKey>
+		INSERT INTO tbl_board (bno, title, content, writer) 
+			VALUES ( #{bno}, #{title} , #{content} , #{writer})
+	</insert>
+	
+	<select id="getOne" resultType="com.mimi.vo.BoardVO">
+		SELECT * FROM tbl_board WHERE bno = #{bno}
+	</select>
+	
+	<update id="update">
+		UPDATE tbl_board SET title = #{title}, content = #{content}, writer = #{writer}, updatedate = sysdate WHERE bno = #{bno}
+	</update>
+	
+	<delete id="delete">
+		DELETE tbl_board WHERE bno = #{bno}
+	</delete>
+	
+	<select id="getTotalCnt" resultType="int">
+		SELECT COUNT(*) FROM tbl_board WHERE bno > 0
+	</select>
+	
+</mapper>

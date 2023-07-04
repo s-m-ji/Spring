@@ -11,8 +11,11 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.mimi.ex">
+	<!-- <logger name="com.mimi.ex"> -->
+	<!-- 다른 패키지에도 로그를 기록할 수 있게 설정 -->
+	<logger name="com.mimi"> 
 		<level value="info" />
+		<!-- <level value="debug" /> -->
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

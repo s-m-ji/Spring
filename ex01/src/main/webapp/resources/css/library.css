@@ -1,0 +1,80 @@
+@font-face {
+  font-family: "SUITE-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+* {
+  font-family: "SUITE-Regular";
+  list-style: none;
+}
+
+ul,ol,li {
+	margin : 0;
+  	padding: 0;
+}
+
+ul li {
+	display: inline-block;
+ margin: 0 5px;
+ padding: 5px 0px 5px 35px;
+ position: relative;
+ background-color: #c0d4fb;
+}
+
+ul li:after,
+ul li:before {
+content: " ";
+ position: absolute;
+ top: 0;
+ right: -30px;
+ width: 0;
+ height: 0;
+ border-top: 30px solid transparent;
+ border-bottom: 30px solid transparent;
+ border-left: 30px solid #c0d4fb;
+ z-index: 2;
+}
+
+ul li:before {
+right: auto;
+ left: 0;
+ border-left: 30px solid #fff;
+ z-index: 0;
+}
+
+mark {
+  background-color: #adff2f96;
+}
+a {
+  border-radius: 15px;
+  padding: 5px 15px;
+  display: inline-block;
+  background-color: buttonface;
+  border-width: 2px;
+  border-style: outset;
+  border-color: buttonborder;
+}
+
+button,
+input[type="submit"] {
+  border-radius: 15px;
+  padding: 5px 15px;
+  margin: 10px;
+}
+button:hover,
+a:hover,
+input[type="submit"]:hover {
+  cursor: pointer;
+  border-color: #bcbcbc;
+  background: linear-gradient(#eee, #bcbcbc);
+}
+.area {
+  border: 1px solid #000;
+  width: 600px;
+  height: 200px;
+  overflow: scroll;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}

@@ -13,7 +13,7 @@ import com.mimi.vo.Member;
 @Controller
 public class RestController {
 	/*
-	 * JSO 데이터를 반환하는 방법
+	 * JSON 데이터를 반환하는 방법
 	 * 
 	 * 1) 라이브러리 추가
 	 * jackson-databind 라이브러리를 메이븐 리바피토리에서 검색 후 pom.xml 파일에 추가.
