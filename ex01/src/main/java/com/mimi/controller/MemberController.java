@@ -41,7 +41,8 @@ public class MemberController {
 		
 		System.out.println("-------- MemberController service 실행 완료");
 		
-		return "main";
+		// return "main";
+		return "redirect:/board/list";
 	}
 	
 }

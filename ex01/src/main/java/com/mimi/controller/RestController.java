@@ -16,7 +16,7 @@ public class RestController {
 	 * JSON 데이터를 반환하는 방법
 	 * 
 	 * 1) 라이브러리 추가
-	 * jackson-databind 라이브러리를 메이븐 리바피토리에서 검색 후 pom.xml 파일에 추가.
+	 * jackson-databind 라이브러리를 메이븐 리파지토리에서 검색 후 pom.xml 파일에 추가.
 	 * 
 	 * 2) 리턴 타입에 어노테이션 추가
 	 * 메소드 선언부의 리턴타입에 ResponseBody 어노테이션을 추가.

@@ -6,9 +6,13 @@ import lombok.Data;
 public class BoardVO {
 	private int bno;
 	private String title;
+	private String id;
 	private String content;
 	private String writer;
 	private String regdate;
 	private String updatedate;
+	private String rent_no;
+	private String rent_date;
+	private String return_exp_date;
 	
 }

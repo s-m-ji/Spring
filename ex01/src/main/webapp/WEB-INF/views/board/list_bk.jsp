@@ -8,7 +8,14 @@
 <link rel="stylesheet" href="/resources/css/style.css">
 <title>Insert title here</title>
 </head>
-<body>
+<body> 
+<!-- 글쓰기 알림 출력 -->
+<%-- message : ${message}
+<c:if test="${not empty message}">
+  <script>
+    alert('${message}');
+  </script>
+</c:if> --%>
 	<h2>📚 목록 보기 📚  </h2>
 	<!-- 글쓰기 버튼 -->
 	<table>
@@ -22,6 +29,7 @@
 			<th width="35%">제목</th>		
 			<th>내용</th>		
 			<th>작가</th>		
+			<th>작성일</th>		
 		</tr>
 		<c:choose>
 			<c:when test="${empty list}">
@@ -36,6 +44,7 @@
 						<td><a href="../view?bno=${book.bno}">${book.title}</a></td>
 						<td>${book.content}</td>
 						<td>${book.writer}</td>
+						<td>${book.regdate}</td>
 					</tr>
 				</c:forEach>
 			</c:otherwise>
