@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mimi.service.BoardService;
 import com.mimi.vo.BoardVO;
+import com.mimi.vo.Criteria;
 
 import lombok.extern.log4j.Log4j;
 
@@ -35,29 +36,35 @@ public class BoardController {
 	/*
 	 * ▶ ▶ ▶ 부트스트랩 테스트용 화면 연결
 	 */
+	/*
 	@GetMapping("list_bs")
 	public void list_bs(Model model) {
 		List<BoardVO> list = bService.getListXml();
 		model.addAttribute("list", list);
 		
 	}
-	
+	*/
+	/*
 	@GetMapping("list_sb")
 	public void list_sb(Model model) {
 		List<BoardVO> list = bService.getListXml();
 		model.addAttribute("list", list);
 		
 	}
+	*/
 	
 	/*
 	 * ▶ ▶ ▶ 게시글 목록 화면으로 이동
 	 */
 	@GetMapping("list")
-	public void getListXml(Model model) {
-		List<BoardVO> list = bService.getListXml();
-		log.info("list.여기를보세요.여기를보세요.여기를보세요.여기를보세요.여기를보세요." + list);
-		model.addAttribute("list", list);
-		
+	public void getListXml(Model model, Criteria cri) {
+		bService.getListXml(model, cri);
+		log.info("cri ▶ ▶ ▶ " + cri);
+	}
+	
+	@GetMapping("pageNavi")
+	public void page() {
+				
 	}
 	
 	/*
@@ -117,9 +124,10 @@ public class BoardController {
 			}
 		} else {
 			System.out.println("******************** write 실패 : getBno()>0 위배");
-			msg = board.getBno() + "번 글  write 실패  : getBno()>0 위배";
-			rdAttr.addFlashAttribute("failMsg" , msg);
+			// msg = board.getBno() + "번 글  write 실패  : getBno()>0 위배";
+			// rdAttr.addFlashAttribute("failMsg" , msg);
 			log.info(msg);
+			return "redirect:/board/write";
 		}
 		// TODO bno에 ""이 들어갈 경우를 처리해야함
 		return "redirect:/board/message";
@@ -145,15 +153,19 @@ public class BoardController {
 		if(res>0) {
 			System.out.println("******************** edit 성공");
 			 msg = board.getBno() + "번 글 edit 성공";
-			 rdAttr.addFlashAttribute("passMsg" , msg); 
+			 rdAttr.addFlashAttribute("passMsgPost" , msg); 
+			 rdAttr.addFlashAttribute("book" , board);
+			 log.info(board);
 			 System.out.println("res : " + res);
 		} else {
 			System.out.println("******************** edit 실패");
 			msg = board.getBno() + "번 글  edit 실패";
 			rdAttr.addFlashAttribute("failMsg" , msg);
+			log.debug(board);
 			System.out.println("res : " + res);
 		}
 		
+		// redirect 시 request 영역에 저장되지 않기 때문에  RedirectAttributes를 이용해서 값을 보내기
 		return "redirect:/board/message";
 	}
 	
@@ -181,7 +193,7 @@ public class BoardController {
 	*/
 	
 	@GetMapping("delete")
-	public String deletePost(RedirectAttributes rdAttr, @RequestParam("delNo") List<Integer> delList) {
+	public String deletePost(RedirectAttributes rdAttr, @RequestParam("bno") List<Integer> delList) {
 	    StringBuilder msg = new StringBuilder();
 	    int passCnt = 0;
 

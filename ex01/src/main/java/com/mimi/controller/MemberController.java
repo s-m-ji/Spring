@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mimi.service.MemberService;
 import com.mimi.vo.Member;
@@ -28,7 +29,8 @@ public class MemberController {
 	
 	
 	@PostMapping("/loginAction")
-	public String loginAction(Member member, Model model) { 
+	//public String loginAction(Member member, Model model) { 
+		public String loginAction(Member member, RedirectAttributes rdAttr) { 
 		// 매개변수로 member 객체를 넣으면 알아서 id, pw 등등 가져와줌
 		// 그리고 Model 객체를 통해 메세지를 출력 (like HttpServletResponse 객체)
 		
@@ -36,7 +38,7 @@ public class MemberController {
 		//System.out.println("PW : " + member.getPw());
 		//System.out.println("NAME : " + member.getName());
 		
-		service.login(member, model);
+		service.login(member, rdAttr);
 		//model.addAttribute("message", member.getId() + " 환상의 나라로 오세요 ~ 🎈🎆✨🎉🎢🎪🎠🎡  ");
 		
 		System.out.println("-------- MemberController service 실행 완료");

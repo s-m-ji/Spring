@@ -3,6 +3,7 @@ package com.mimi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mimi.dao.MemberDao;
 import com.mimi.vo.Member;
@@ -13,13 +14,14 @@ public class MemberService {
 	@Autowired // new MemberDao() 생성 과정을 생략할 수 있음
 	MemberDao dao;
 	
-	public Member login(Member paramMember, Model model) {
+	public Member login(Member paramMember, RedirectAttributes rdAttr) {
 		Member member = dao.login(paramMember);
 		if(member == null) {
-			model.addAttribute("message", "ID 또는 PW를 확인해줘잉");
+			//model.addAttribute("message", "ID 또는 PW를 확인해줘잉");
 			System.out.println(" ---------- MemberSevice 로그인 실패");
 		} else {
-			model.addAttribute("message", member.getId() + " 환상의 나라로 오세요 ~ 🎈🎆✨🎉🎢🎪🎠🎡  ");
+			//model.addAttribute("message", member.getId() + " 환상의 나라로 오세요 ~ 🎈🎆✨🎉🎢🎪🎠🎡  ");
+			rdAttr.addFlashAttribute("message", member.getId() + " 환상의 나라로 오세요 ~ 🎈🎆✨🎉🎢🎪🎠🎡  ");
 			System.out.println(" ---------- MemberSevice 로그인 성공");
 		}
 		return member;

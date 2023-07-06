@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Select;
 
 import com.mimi.vo.BoardVO;
+import com.mimi.vo.Criteria;
 
 public interface BoardMapper {
 	
@@ -12,7 +13,7 @@ public interface BoardMapper {
 	@Select("SELECT * FROM tbl_board")
 	public List<BoardVO> getList(); // List 타입인 이유 : 쿼리 결과를 조회
 
-	public List<BoardVO> getListXml();
+	public List<BoardVO> getListXml(Criteria cri);
 	
 	public int insert(BoardVO board); // int 타입인 이유 : 몇 건이 처리되었는지 조회 
 	
@@ -24,7 +25,7 @@ public interface BoardMapper {
 	
 	public int delete(int bno);
 	
-	public int getTotalCnt();
+	public int getTotalCnt(Criteria cri);
 	
 	
 }

@@ -2,11 +2,16 @@ package com.mimi.service;
 
 import java.util.List;
 
+import javax.servlet.jsp.tagext.PageData;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.mimi.mapper.BoardMapper;
 import com.mimi.vo.BoardVO;
+import com.mimi.vo.Criteria;
+import com.mimi.vo.pageDto;
 
 /*
  * 각 계층 간의 연결은 인터페이스를 활용하여 느슨한 결합을 한다. 
@@ -38,8 +43,24 @@ public class BoardServiceImpl implements BoardService{
 	private BoardMapper bMapper;
 
 	@Override
-	public List<BoardVO> getListXml() {		
-		return bMapper.getListXml();
+	public void getListXml(Model model, Criteria cri) {
+		/*
+		 * 1) 리스트 조회 - 검색어, 페이지 정보 
+		 * 2) 총 건수 조회
+		 * 3) pageDto 객체 생성
+		 * 
+		 *  파라미터 자동 수집 : 기본생성자를 이용해서 객체를 생성 ! -> setter 메소드를 이용해서 셋팅
+		 */
+		List<BoardVO> list = bMapper.getListXml(cri);
+		int totalCnt = bMapper.getTotalCnt(cri);
+		pageDto pageDto = new pageDto(cri, totalCnt);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("tCnt", totalCnt);
+		model.addAttribute("pDto", pageDto);
+		//model.addAttribute("cri", cri);
+		
+		// return bMapper.getListXml(cri);
 	}
 
 	@Override
@@ -68,8 +89,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int getTotalCnt() {
-		return bMapper.getTotalCnt();
+	public int getTotalCnt(Criteria cri) {
+		return bMapper.getTotalCnt(cri);
 	}
+
 
 }

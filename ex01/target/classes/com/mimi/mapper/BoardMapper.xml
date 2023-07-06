@@ -16,7 +16,16 @@
 		insert, upadte와 같은 경우 모두 결과 타입이 int이므로  resultType 필요없음 
 	-->
 	<select id="getListXml" resultType="com.mimi.vo.BoardVO">
-		<![CDATA[ SELECT * FROM tbl_board WHERE bno > 0 ORDER BY bno DESC]]>
+		<![CDATA[ SELECT * FROM (
+						SELECT t.*, ROWNUM rn FROM (
+							SELECT bno, title, content, writer, 
+							decode( trunc(sysdate), trunc(regdate), to_char(regdate, 'hh24:mi:ss'), to_char(regdate, 'yyyy-mm-dd') ) regdate
+						, decode( trunc(sysdate), trunc(updatedate),  to_char(updatedate, 'hh24:mi:ss'), to_char(updatedate, 'yyyy-mm-dd') ) updatedate
+ 					FROM tbl_board WHERE bno > 0 
+							]]>
+							<include refid="criteria"></include>
+							 ORDER BY bno DESC ) t
+								) WHERE rn BETWEEN #{startNo} AND #{endNo} 
 	<!-- 
 		사실 이렇게 bno > 0 처럼 꺽쇠괄호가 들어가면 
 		태그 기호의 일부로 인식하여 파싱 오류 가능성도 있기 때문에 <![CDATA[ ]]> 이 처리를 함 
@@ -66,7 +75,46 @@
 	</delete>
 	
 	<select id="getTotalCnt" resultType="int">
-		SELECT COUNT(*) FROM tbl_board WHERE bno > 0
+		<!-- 공통 조건을 AND부터 넣을 예정이므로 WHERE 꼭 필요함 ! -->
+		SELECT COUNT(*) FROM tbl_board WHERE bno > 0 
+		<include refid="criteria"></include>
 	</select>
 	
+	<!-- 반복되는 쿼리를 미리 작성해놓고 재활용하기
+		반복할 쿼리 선언 : <sql id="">
+		선언한 쿼리 사용 : <include refId="">
+		변수 사용 방법 : <property name="">
+		
+		* refId = reference id	
+	 -->
+	<sql id="criteria">
+		<choose>
+			<when test="sField == 'title'">
+				AND title LIKE '%'||#{sWord}||'%'
+			</when>
+			<when test="sField == 'content'">
+				AND content LIKE '%'||#{sWord}||'%'
+			</when>
+			<when test="sField == 'writer'">
+				AND writer LIKE '%'||#{sWord}||'%'
+			</when>
+		</choose>
+	</sql>
+	
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

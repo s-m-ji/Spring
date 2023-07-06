@@ -1,14 +1,14 @@
 package com.mimi.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.mimi.vo.BoardVO;
+import com.mimi.vo.Criteria;
 
 @Service
 public interface BoardService {
-	public List<BoardVO> getListXml();
+	public void getListXml(Model model, Criteria cri);
 	
 	public int insert(BoardVO board); 
 	
@@ -20,5 +20,5 @@ public interface BoardService {
 	
 	public int delete(int bno);
 	
-	public int getTotalCnt();
+	public int getTotalCnt(Criteria cri);
 }
