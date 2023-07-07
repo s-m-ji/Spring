@@ -1,16 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>🤗 도호호호호호서관 🤗</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -26,20 +26,72 @@
 
     <!-- Custom Fonts -->
     <link href="/resources/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- DataTables CSS -->
+    <link href="/resources/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
+    <!-- DataTables Responsive CSS -->
+    <link href="/resources/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+	
+	    <!-- Custom js (MI, 2023/07/07) -->
+    <script src='/resources/js/custom.js'></script>
+    <script src="https://kit.fontawesome.com/bc0f5040fb.js" crossorigin="anonymous"></script>
+	
+	<style> 
+		/* Custom style (MI, 2023/07/07) */
+		@font-face {
+		  font-family: "SUITE-Regular";
+		  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
+		    format("woff2");
+		  font-weight: 400;
+		  font-style: normal;
+		}
+		:not(i) {
+		  font-family: "SUITE-Regular" !important;
+		} 
+		.point {
+            background: #adff2f96;
+		    padding: 5px 15px;
+		    border-radius: 15px;
+		    display: inline-block;
+		        font-weight: bold;
+		}
+		.point.rest {
+			background:#ceceff;
+		}
+		.point.return {
+			background:#abffa7;
+		}
+		.point.rest.red {
+			background:#ffafa6;
+		}
+		.point.rest.orange {
+			background:#fee596;
+		}
+		
+		.table-striped>tbody>tr:nth-of-type(odd) {
+			background-color:#dfdfdf;
+		}
+		
+		a {color: #7070ff;}
+		
+		i {font-size: 2rem;}
+		
+		th, td {
+			vertical-align: middle;
+			text-align:center;
+		}
+		
+		td:last-of-type {
+			text-align:left;
+		}
+		
+		sup {font-size: 1.2rem;}
+		
+	</style>
 </head>
-
 <body>
-
     <div id="wrapper">
-
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -49,7 +101,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">SB Admin v2.0</a>
+                <a class="navbar-brand" href="index.html">🤗 도호호호호호서관 🤗</a>
+                
             </div>
             <!-- /.navbar-header -->
 
@@ -278,7 +331,7 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard </a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
@@ -370,23 +423,6 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-      
-    <!-- jQuery -->
-    <script src="/resources/vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="/resources/vendor/metisMenu/metisMenu.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="/resources/vendor/raphael/raphael.min.js"></script>
-    <script src="/resources/vendor/morrisjs/morris.min.js"></script>
-    <script src="/resources/data/morris-data.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="/resources/dist/js/sb-admin-2.js"></script>
-
-</body>
-</html>
+        
+       </div>
+  

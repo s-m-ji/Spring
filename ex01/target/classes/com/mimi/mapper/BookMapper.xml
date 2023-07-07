@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mimi.mapper.BookMapper">
+
+<select id="getList" resultType="com.mimi.vo.BookVO">
+	<![CDATA[ 
+	SELECT * FROM (
+		SELECT t.*, ROWNUM rn FROM (
+			SELECT idx, title, writer, publisher, d.대여번호, d.대여여부,
+					TO_DATE(TO_CHAR(반납가능일, 'yy/mm/dd'), 'YY/MM/DD') - TRUNC(SYSDATE) AS rest_date,
+					TRUNC(SYSDATE) - TO_DATE(TO_CHAR(반납가능일, 'yy/mm/dd'), 'YY/MM/DD') AS no_rent,
+					 TO_CHAR(대여일, 'yy-mm-dd') AS rent_date,
+					  TO_CHAR(반납가능일, 'yy-mm-dd') AS return_exp_date,
+					   TO_CHAR(반납일, 'yy-mm-dd') AS return_date,
+						DECODE(rent_yn, 'Y', '*대출중*', 'N', '-') AS rent_str
+				FROM libboard b LEFT JOIN 대여 d ON b.idx = d.도서번호  WHERE idx > 0
+				 ]]>
+				<include refid="criteria"></include>
+				ORDER BY idx DESC 
+			) t 
+		) WHERE rn BETWEEN #{startNo} AND #{endNo}  
+</select>
+
+<select id="getView" resultType="com.mimi.vo.BookVO">
+		SELECT * FROM libboard WHERE idx = #{idx}
+</select>
+
+<select id="getTotalCnt" resultType="int">
+	<![CDATA[ 
+		SELECT COUNT(*)	FROM 
+			( SELECT idx, title, writer, publisher, d.대여번호, d.대여여부,
+					TO_DATE(TO_CHAR(반납가능일, 'yy/mm/dd'), 'YY/MM/DD') - TRUNC(SYSDATE) AS rest_date,
+					TRUNC(SYSDATE) - TO_DATE(TO_CHAR(반납가능일, 'yy/mm/dd'), 'YY/MM/DD') AS no_rent,
+					 TO_CHAR(대여일, 'yy-mm-dd') AS rent_date,
+					  TO_CHAR(반납가능일, 'yy-mm-dd') AS return_exp_date,
+					   TO_CHAR(반납일, 'yy-mm-dd') AS return_date,
+						DECODE(rent_yn, 'Y', '*대출중*', 'N', '-') AS rent_str
+				FROM libboard b LEFT JOIN 대여 d ON b.idx = d.도서번호  WHERE idx > 0 
+		 ]]>
+	<include refid="criteria"></include> )
+</select>
+
+<sql id="criteria">
+	<choose>
+		<when test="sField == 'idx'">
+			AND idx LIKE '%'||#{sWord}||'%'
+		</when>
+		<when test="sField == 'title'">
+			AND title LIKE '%'||#{sWord}||'%'
+		</when>
+		<when test="sField == 'writer'">
+			AND writer LIKE '%'||#{sWord}||'%'
+		</when>
+		<when test="sField == 'publisher'">
+			AND publisher LIKE '%'||#{sWord}||'%'
+		</when>
+	</choose>
+</sql>
+
+</mapper>

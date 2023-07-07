@@ -1,6 +1,4 @@
-/**
- * 
- */
+// window.onload = (e) => {
 	  function rentBook(){
 		 delList = document.querySelectorAll('[name=delNo]:checked');
 		 let delNo = "";
@@ -68,21 +66,25 @@
 
 	 // ▶▶▶  페이지네이션
 	function go(page){
+		//e.preventDefault();
 		document.searchForm.action = "./list";
 		document.searchForm.pageNo.value=page;
 		document.searchForm.submit();
 	}
 	
 	function requestAction(url,bno) {
+		//e.preventDefault();
 		searchForm.action = url;
 		searchForm.bno.value = bno;
 		searchForm.submit();
 	}
 	
+	// 한 페이지에 보여지는 리스트 개수 조정
 	function changePageSize(value) {
     	var searchForm = document.forms.searchForm;
-    		searchForm.searchAmount.value = value;
+    		searchForm.amount.value = value;
     		searchForm.submit();
 	}
-	 
+// }
+
 

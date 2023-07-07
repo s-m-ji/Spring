@@ -71,7 +71,6 @@
 			</c:otherwise>
 		</c:choose>
       </div>
-      <%-- <%@ include file="../common/pageNavi.jsp" %> --%>
-       <%@ include file="pageNavi.jsp" %>
+      <%@ include file="../common/pageNavi.jsp" %>
   </body>
 </html>

@@ -98,6 +98,8 @@
 
     <!-- Custom styles for this template -->
     <!-- <link href="navbar-top-fixed.css" rel="stylesheet" /> -->
+    
+    <!-- Custom js (MI, 2023/07/06) -->
     <script src='/resources/js/custom.js'></script>
   </head>
   <body>
