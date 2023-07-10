@@ -16,4 +16,8 @@ public interface BookService {
 	// public BookVO getView(int idx);
 
 	BookVO getView(int idx, Model model);
+
+	public void write(int idx, Model model);
+
+	public int writePost(BookVO book);
 }

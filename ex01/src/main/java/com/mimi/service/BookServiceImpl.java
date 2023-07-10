@@ -46,4 +46,16 @@ public class BookServiceImpl implements BookService {
 		return book;
 	}
 
+	@Override
+	public void write(int idx, Model model) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int writePost(BookVO book) {
+		return 0;
+		
+	}
+
 }

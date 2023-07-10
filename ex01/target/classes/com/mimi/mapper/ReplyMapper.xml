@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mimi.mapper.ReplyMapper">
+
+<select id="getList" resultType="com.mimi.vo.ReplyVO">
+	SELECT bno, rno, reply, replyer, TO_CHAR(replyDate, 'yyyy/MM/dd') AS replyDate, updateDate
+	 FROM tbl_reply WHERE bno = #{bno} ORDER BY rno DESC
+</select>
+
+<insert id="insert">
+	INSERT INTO tbl_reply VALUES (SEQ_REPLY.NEXTVAL, #{bno}, #{reply}, #{replyer}, SYSDATE, SYSDATE)
+</insert>
+
+<delete id="delete">
+ 	DELETE tbl_reply WHERE rno = #{rno}
+</delete>
+
+<select id="getReply" resultType="com.mimi.vo.ReplyVO">
+ 	SELECT * FROM tbl_reply WHERE rno = #{rno}
+</select>
+
+<update id="update">
+	UPDATE tbl_reply SET reply = #{reply} WHERE rno = #{rno}
+</update>
+</mapper>

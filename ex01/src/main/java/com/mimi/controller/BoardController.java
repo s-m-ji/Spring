@@ -25,6 +25,11 @@ public class BoardController {
 	@Autowired
 	BoardService bService;
 	
+	@GetMapping("/reply/test")
+	public String test() {
+		return "/reply/test"; // 실제 요청(url)은 /board/reply/test 이렇게니까 유의 ~
+	}
+	
 	/*
 	 * ▶ ▶ ▶ 메세지 화면으로 이동
 	 */

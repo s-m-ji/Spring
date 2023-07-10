@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mimi.service.BookService;
 import com.mimi.vo.BookVO;
@@ -12,7 +14,7 @@ import com.mimi.vo.Criteria;
 
 import lombok.extern.log4j.Log4j;
 
-@Controller
+@Controller // 이 어노테이션은 기본적으로 jsp를 반환하게끔 설정되어있음
 @RequestMapping("/book/*")
 @Log4j
 public class BookController {
@@ -50,10 +52,23 @@ public class BookController {
 	}
 	
 	/*
-	 * 도서 상세 조회
+	 * 도서 등록 화면 이동
 	 */
 	@GetMapping("write")
-	public void write() {
+	public void write(Model model, BookVO book) {
+		
+	}
+	
+	/*
+	 * 도서 등록 작업 처리
+	 */
+	@PostMapping("writePost")
+	public void writePost(Model model, BookVO book, RedirectAttributes rttr) {
+		log.info(book);
+		String msg = "";
+		if(book.getIdx()>0) {
+		int res = bService.writePost(book);
+		}
 		
 	}
 }
