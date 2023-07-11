@@ -43,6 +43,7 @@
 				  <button type="button" class="btn btn-default" onclick="requestAction('./delete', ${book.idx});">글 삭제하기</button>
 				  <button type="button" class="btn btn-default" onclick="location.href='./list?pageNo=${param.pageNo}'">목록 바로가기</button>
 				  <input type="text" name="pageNo" value="${param.pageNo}">
+				  <input type="text" name="bno" id="bno" value="${param.bno}">
                 </div>
                 <!-- /.col-lg-12 -->
 			  <button type="button" class="btn btn-default" onclick="location.href='./view?idx=${book.idx -1}'">이전 글</button>
@@ -51,7 +52,9 @@
             <!-- /.row -->
         </div>
         <!-- /#page-wrapper -->
+<%@ include file="../reply/test.jsp" %>
+        </div>
 <!-- 푸터 -->
 <%@ include file="../common/footer.jsp" %>
-
+<br><br><br>
 

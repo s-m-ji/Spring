@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mimi.mapper.ReplyMapper;
+import com.mimi.vo.Criteria;
 import com.mimi.vo.ReplyVO;
 
 import lombok.extern.log4j.Log4j;
@@ -24,20 +25,25 @@ public class ReplyMapperTest {
 	@Autowired
 	ReplyMapper rMapper;
 	
+	
 	@Test
 	public void getListTest() {
 		assertNotNull(rMapper);
-	 	List<ReplyVO> list = rMapper.getList(1);
+		
+		Criteria cri = new Criteria();
+		cri.setAmount(10);
+		cri.setPageNo(1);
+	 	List<ReplyVO> list = rMapper.getList(1, cri);
 	 	System.out.println("---------------------------------------------------------------------------------");
 	 	log.info("list : " + list);
 	}
 	
 	@Test
-	public void getReply() {
+	public void getTotalCnt() {
 		assertNotNull(rMapper);
-	 	ReplyVO vo = rMapper.getReply(1);
+	 	int total = rMapper.getTotalCnt(1);
 	 	System.out.println("---------------------------------------------------------------------------------");
-	 	log.info("vo : " + vo);
+	 	log.info("total : " + total);
 	}
 	
 	@Test
@@ -69,7 +75,7 @@ public class ReplyMapperTest {
 	@Test
 	public void updateTest() {
 		ReplyVO vo = new ReplyVO();
-		vo.setRno(14);
+		vo.setRno(10);
 		vo.setReply("댓글 수정");
 		int res = rMapper.update(vo);
 		System.out.println("---------------------------------------------------------------------------------");

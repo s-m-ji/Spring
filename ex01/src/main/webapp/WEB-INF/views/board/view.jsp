@@ -15,7 +15,7 @@
 	<h2>📚 도서 상세 보기 📚  </h2>
 		<form name="searchForm">
 		<!-- <form name="postForm"> -->
-		<input type="text" name="bno" value="${book.bno}">
+		<input type="text" name="bno" id="bno" value="${book.bno}">
 		<div class="row">
 		  <div class="col input-group mb-3">
 			 <span class="input-group-text" id="basic-addon1">등록일</span>
@@ -59,5 +59,6 @@
 		  <button type="button" class="btn btn-dark" onclick="location.href='./view?bno=${book.bno +1}'">다음 글</button>
 	</div>
 	</main>
+	<%-- <%@ include file="../reply/test.jsp" %> --%>
 </body>
 </html>

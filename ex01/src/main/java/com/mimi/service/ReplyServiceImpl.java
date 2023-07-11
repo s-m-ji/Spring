@@ -2,10 +2,12 @@ package com.mimi.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mimi.mapper.ReplyMapper;
+import com.mimi.vo.Criteria;
 import com.mimi.vo.ReplyVO;
 
 @Service
@@ -15,8 +17,8 @@ public class ReplyServiceImpl implements ReplyService {
 	ReplyMapper rMapper;
 	
 	@Override
-	public List<ReplyVO> getList(int bno) {
-		return rMapper.getList(bno);
+	public List<ReplyVO> getList(@Param(value="bno")int bno, @Param(value="cri")Criteria cri) {
+		return rMapper.getList(bno, cri);
 	}
 
 	@Override
@@ -35,8 +37,9 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public ReplyVO getReply(int rno) {
-		return rMapper.getReply(rno);
+	public int getTotalCnt(int bno) {
+		return rMapper.getTotalCnt(bno);
 	}
 
+	
 }

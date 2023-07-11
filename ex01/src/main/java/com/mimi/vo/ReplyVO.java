@@ -6,6 +6,7 @@ import lombok.Data;
 public class ReplyVO {
 	private int rno;
 	private int bno;
+	private int rn; // 페이지네이션 ROWNUM rn 확인용
 	private String reply;
 	private String replyer;
 	private String replydate;

@@ -4,127 +4,192 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-<script src="https://kit.fontawesome.com/bc0f5040fb.js" crossorigin="anonymous"></script>
 <style>
-@font-face {
-	  font-family: "SUITE-Regular";
-	  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
-	    format("woff2");
-	  font-weight: 400;
-	  font-style: normal;
-	}
-	:not(i) {
-	  font-family: "SUITE-Regular" !important;
-	} 
-	body {
-		padding: 10%;
-	}
 	i {
 		cursor: pointer;
+	}
+	table {
+		width: 100%;
+	}
+	.reply td {
+		text-align: left;
+	}
+	figure:nth-child(odd){
+		background-color:lavender;
+	}
+	.page-item {
+		cursor: pointer;
+	}
+	.pagination>li>a, .pagination>li>span {
+		color:#6610f2;
 	}
 </style>
 
 <title>test.jsp</title>
 
 <script type="text/javascript">
-	// 댓글 리스트를 서버에 요청
-	// 데이터를 구하는 부분을 함수로 맹글기
+	// 서버에  댓글 리스트를 요청 : 데이터를 구하는 부분을 함수로 맹글기
 	function getList(){
 		let bno = document.querySelector("#bno").value;
-		let url = "/reply/list/" + bno;
-		
-		// url 요청 결과를 받아오기
-		fetch(url)
-		// response.json() : 요청 결과를 js object 형식으로 반환 : 그래야 list.속성으로 값을 이용할 수 있음
-		.then(response => response.json())
-		// 반환 받은 오브젝트를 이용하여 화면에 출력
-		//.then(list => console.log(list)); // 'list'는 임의 작명 내 맘대루 ~~
-		.then(list => replyView(list)); 
+		let page = document.querySelector("#page").value;
+		let url = "/reply/list/" + bno + "/" + page;
+	
+		// fetch 구문을 함수로 만들어서 재사용함
+		fetchGet(url, replyView);
 	}
 	
 	// list를 화면에 출력
-	function replyView(list){
-		console.log(list);
+	function replyView(map){
+		let list = map.list; // 이건 컨트롤러에서 map.put으로 저장해둔 값.
+		let pDto = map.pDto; 
 		
-		// 반복문  ▷ reply: 정보가 담긴 객체, index: list의 방번호
+		console.log('list', list);
+		console.log('pDto', pDto);
 		
 		replyDiv.innerHTML = ''; // replyDiv 초기화 ~
 		
+		// [댓글 리스트]
+		// 반복문  ▷ reply: 정보가 담긴 객체, index: list의 방번호
 		list.forEach((reply, index) => {
-			console.log();
-			/*  replyDiv.innerHTML += '<br>' + reply.rno;
-			replyDiv.innerHTML += '<br>' + reply.bno;
-			replyDiv.innerHTML += '<br>' + reply.reply;
-			replyDiv.innerHTML += '<br>' + reply.replyer;
-			replyDiv.innerHTML += '<br>' + reply.replydate;  */
 			
+			let nowDate = new Date(); // 현재 날짜/시각 가져오기
+		    let replyDate = new Date(reply.replydate); // reply.replydate를 Date 객체로 변환
+		    let date = (nowDate.toDateString() !== replyDate.toDateString()) ? reply.updatedate : reply.replydate; // 현재 날짜/시각과 reply.replydate 비교하여 값 결정
+					
 			replyDiv.innerHTML 
-			+= '<figure id="reply'+ index +'">' // 인덱스 값 활용하여 id를 다르게 부여
+			+= '<figure id="reply'+ index +'" data-value="' + reply.reply + '" data-rno="' + reply.rno + '">' // 인덱스 값 활용하여 id를 다르게 부여 
 			
-			+ 	'<blockquote class="blockquote">'
-			+ 		'<p>' + reply.reply + ' <font color="#6610f2">'
-			+			' <i class="fa-solid fa-square-pen" onclick="rpUpdate('+ reply.rno +')"></i>'
-			+			' <i id="btnEdit" class="fa-solid fa-trash" onclick="rpDelete('+ reply.rno +')"></i>'
+			+ 	'<table class="reply"><tr><td width="95%"><blockquote class="blockquote">'
+			+ 		'<p>' + reply.reply + '</td><td> <font color="#6610f2">'
+			+			' <i id="btnEdit" class="fa-solid fa-square-pen" onclick="rpEdit('+ index +', '+ reply.rno +')"></i>'
+			+			' <i id="btnDelete" class="fa-solid fa-trash" onclick="rpDelete('+ reply.rno +')"></i>'
 			+		'</font> </p>'
-			+ 	'</blockquote>'
+			+ 	'</blockquote></td></tr>'
 			
-			+ 	'<figcaption class="blockquote-footer"> <font color="#6610f2">'
-			+  		''+ reply.replyer + '</font> <cite title="Source Title"> &nbsp;' + reply.replydate + '</cite>'
-			+ 	'</figcaption>'
+			+ 	'<tr><td colspan="2"><figcaption class="blockquote-footer"> <font color="#6610f2">'
+			+  		''+ reply.replyer + '</font> <cite title="Source Title"> &nbsp;' + date + '</cite>'
+			+ 	'</figcaption></td></tr></table>'
 			
 			+'</figure>';
 		}); 
+	
+		// [댓글 리스트 페이지네이션]
+		let disabledP = (pDto.prev == false)? 'disabled':"";
+		let disabledN = (pDto.next == false)? 'disabled':"";
+		let active = (pDto.cri.pageNo == i)? 'active':"";
+		let goP = (pDto.prev == false)? 1 : (pDto.startNo - 1);
+		let goN = (pDto.endNo + 1) > pDto.realEndNo ? pDto.realEndNo : (pDto.endNo + 1);
 		
+		var pageBlock = '<nav aria-label="...">' +
+		  '   <ul class="pagination justify-content-center">' +
+		  '     <li class="page-item  '+ disabledP +'" onclick="goPage('+ goP +')"><a class="page-link" > ◀ </a></li>';
+
+		for (var i = pDto.startNo; i <= pDto.endNo; i++) {
+		  pageBlock +=
+		    '     <li class="page-item '+ active +'" onclick="goPage('+ i + ')"><a class="page-link">'+ i +'</a></li>';
+		}
+
+		pageBlock +=
+		  '     <li class="page-item '+ disabledN +'" onclick="goPage('+ goN +')"><a class="page-link"> ▶ </a></li>' +
+		  '   </ul>' +
+		  ' </nav>';
+
+		replyDiv.innerHTML += pageBlock;
 	}
 	
 	
+	// 댓글 리스트 페이지네이션 버튼 액션: n쪽 보여주기
+	function goPage(page) {
+		document.querySelector('#page').value = page;
+		  getList(page);
+	}
+
+	
+	// 댓글 수정 화면 보여주기
+	function rpEdit(index){
+		let editBox = document.querySelector("#reply" + index);
+		let replyTxt = editBox.dataset.value;
+		let replyRno = editBox.dataset.rno;
+		
+		editBox.innerHTML = ''
+		+ 	'<div class="input-group mb-3">'
+		+  		'<input type="text" class="form-control" value="'+ replyTxt +'" id="replyEdit'+ replyRno +'">'
+		+  		'<button class="btn btn-outline-secondary" type="button" onclick="rpEditAction('+ replyRno +')";>댓글 수정</button>'
+		+ 	'</div>'; 
+	}
+	
+	
+	// 댓글 수정 처리 
+	function rpEditAction(rno){
+		let reply = document.querySelector('#replyEdit' + rno).value;
+		let replyer = document.querySelector('#replyer').value;
+		
+		let replyObj = {
+				rno : rno
+				, reply : reply
+			};
+			
+		fetchPost('/reply/update', replyObj, replyRes);
+	}
+	
+	
+	// 댓글 삭제 처리
 	function rpDelete(rno){
 		let url = "/reply/delete/" + rno;
-		fetch(url)
-		.then(response => response.json())
-		.then(list => replyRes(list));
-	}
 		
+		fetchGet(url, replyRes);
+	}
 	
+	
+	// 작업 결과 처리
+	function replyRes(map){
+		if(map.result == 'success'){
+			// 댓글 등록 성공 -> 리스트 조회 및 화면 출력
+			getList();
+		} else {
+			// 실패
+			alert(map.message);
+		}		
+	}
+	
+	
+	// Get방식 fetch : url과 함수(callback)를 매개변수로 함
+	function fetchGet(url, callback){
+		try{
+		fetch(url)
+			.then(response => response.json())
+			.then(map => callback(map))
+		} catch(e){
+			console.log('fetchGet', e);
+		}
+	}
+
+	// Post방식 fetch : url과 obj(객체), 함수(callback)를 매개변수로 함
+	function fetchPost(url, obj, callback){
+		try{
+			fetch(url
+					, {method : 'post' 
+						, headers : {'Content-Type' : 'application/json'}
+						, body : JSON.stringify(obj)})
+				.then(response => response.json())
+				.then(map => callback(map))
+		} catch(e){
+			console.log('fetchPost', e);
+		}
+	}
+	
+	
+	// 페이지 로딩 된 후에 실행될 함수들
 	window.onload = function(){
 		// 리스트 조회 및 출력
-		getList();
+		getList(1); // 첫 화면에서는 무조건 댓글 1페이지 보여줌 
 		
 		btnWrite.addEventListener('click', function(){
 			// 1. 파라미터 수집
 			let bno = document.querySelector('#bno').value;
-			let rno = document.querySelector('#rno').value;
 			let reply = document.querySelector('#reply').value;
 			let replyer = document.querySelector('#replyer').value;
 			
-			
-			if(btnWrite.classList.contains('edit')){
-				// 2. 전송할 데이터를 javascript 객체로 생성
-				let replyObj = {
-					rno: rno // 이름 : 값
-					, reply : reply
-				};
-				
-				// 3. 객체(object)를 json 문자열 타입으로 변환
-				let replyJson = JSON.stringify(replyObj);
-				
-				fetch('/reply/update'
-						// get 방식이라면 method 적지 않아도 된다
-						, {method : 'post' 
-							// UTF-8 오류 처리
-							, headers : {'Content-Type' : 'application/json'}
-							, body : replyJson})
-					
-					// 5. 응답 처리
-					.then(response => response.json())
-					//.then(map => console.log(map));
-					.then(map => replyRes(map));
-					
-				btnWrite.classList.remove('edit');
-
-				
-			} else {
 			// 2. 전송할 데이터를 javascript 객체로 생성
 			let replyObj = {
 				bno: bno // 이름 : 값
@@ -132,6 +197,7 @@
 				, replyer : replyer	
 			};
 			
+			/*
 			// 3. 객체(object)를 json 문자열 타입으로 변환
 			let replyJson = JSON.stringify(replyObj);
 				
@@ -147,45 +213,21 @@
 					.then(response => response.json())
 					//.then(map => console.log(map));
 					.then(map => replyRes(map));
-				}
+			*/
+				fetchPost('/reply/insert', replyObj, replyRes);
 			
 		});
 	
 	}
 	
-	
-	function rpUpdate(rno){
-		let url = "/reply/reply/" + rno;
-		fetch(url)
-		.then(response => response.json())
-		.then(input => rpUpdateSet(input));
-		
-	}
-	
-	function rpUpdateSet(input){
-		reply.value = input.reply;
-		btnWrite.classList.add('edit');
-	}
-	
-	
-	function replyRes(map){
-		if(map.result == 'success'){
-			// 댓글 등록 성공 -> 리스트 조회 및 화면 출력
-			getList();
-		} else {
-			// 실패
-			alert(map.message);
-		}		
-		
-	}
 </script>
 
 </head>
 <body>
 	<br>
-	<h1>댓그르르르 🤗🤗</h1>	
-		<input type="text" name="bno" id="bno" value="1" class="form-control">
-		<input type="text" name="rno" id="rno" value="1" class="form-control">
+	<h3>댓그르르르 🤗🤗</h3>	
+		<!-- <input type="text" name="bno" id="bno" value="1" class="form-control"> --><!-- 게시글 번호 : list 페이지에서 받아올거라 주석처리함 -->
+		<input type="text" name="page" id="page" value="1" class="form-control"> <!-- 댓글 리스트 페이지 번호 -->
 		  <input type="text" class="form-control" placeholder="미미" id="replyer">
 		<div class="input-group mb-3">
 		  <input type="text" class="form-control" placeholder="아르르" id="reply">

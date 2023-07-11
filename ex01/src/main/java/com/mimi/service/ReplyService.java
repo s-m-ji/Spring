@@ -2,13 +2,15 @@ package com.mimi.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
+import com.mimi.vo.Criteria;
 import com.mimi.vo.ReplyVO;
 
 @Service
 public interface ReplyService {
-	List<ReplyVO> getList(int bno);
+	List<ReplyVO> getList(@Param(value="bno")int bno, @Param(value="cri")Criteria cri);
 	
 	public int insert(ReplyVO vo);
 	
@@ -16,5 +18,5 @@ public interface ReplyService {
 	
 	public int update(ReplyVO vo);
 
-	ReplyVO getReply(int rno);
+	public int getTotalCnt(int bno);
 }

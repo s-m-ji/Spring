@@ -35,7 +35,7 @@
                                </div>
                                <button type="submit" class="btn btn-default" onclick="go(1);"><i class="fa-solid fa-magnifying-glass"></i></button>
                                <input type="text" name="pageNo" value="${pDto.cri.pageNo}">
-								<input type="text" name="bno" value="">
+								<input type="text" name="bno" id="bno" value="1">
                                <select class="form-control" name="amount" onchange="changePageSize(this.value)">
 					            	<option value="10" ${ amount eq 10 ? "selected" : "" }>10개씩 보기</option>
 					            	<option value="20" ${ amount eq 20 ? "selected" : "" }>20개씩 보기</option>
@@ -73,7 +73,7 @@
 	                                        <td width="5%"><input type="checkbox" name="bno" value="${book.idx}"></td>
 	                                        <td width="5%"><c:out value="${ book.idx }"></c:out></td>
 	                                        <td width="25%">
-	                                        	<a href="./view?idx=${ book.idx }&pageNo=${pDto.cri.pageNo}" target="_blank">
+	                                        	<a href="./view?idx=${ book.idx }&pageNo=${pDto.cri.pageNo}&bno=${book.idx}" target="_blank">
 	                                        	<c:out value="${ book.title }"></c:out> &nbsp; <i class="fa-solid fa-square-arrow-up-right"></i>
 	                                        	</a>
 	                                        </td>

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mimi.service.ReplyService;
+import com.mimi.vo.Criteria;
 import com.mimi.vo.ReplyVO;
+import com.mimi.vo.pageDto;
 
 import lombok.extern.log4j.Log4j;
 
@@ -36,28 +38,35 @@ public class ReplyController {
 	}
 	
 	/*
-	 *        ▶ ▶ ▶  @PathVariable
-	 *     URL 경로에 있는 값을 파라미터로 추출하려고 할 때 사용
+	 *   ▶ ▶ ▶  @PathVariable
+	 *     URL 경로에 있는 값을 파라미터로 추출하려고 할 때 사용 -> URL 경로의 {일부}를 변수로 사용
 	 */
 	// ==================== 댓글 리스트 조회 ==================== 
-	@GetMapping("/reply/list/{bno}")
-	public List<ReplyVO> getList(@PathVariable("bno") int bno){
+	@GetMapping("/reply/list/{bno}/{page}")
+	public Map<String, Object> getList(@PathVariable("bno") int bno, @PathVariable("page") int page){
+		Map<String, Object> map = new HashMap<String, Object>();
+		
 		System.out.println("---------------------------------------------------------------------------------");
 		log.info("bno" + bno);
-		return rService.getList(bno);
+		log.info("page" + page);
+		
+		// 페이징 처리
+		Criteria cri = new Criteria();
+		cri.setPageNo(page);
+		
+		int total = rService.getTotalCnt(bno);
+		pageDto pDto = new pageDto(cri, total);
+		
+		List<ReplyVO> list = rService.getList(bno, cri);
+		map.put("list", list);
+		map.put("pDto", pDto);
+		
+		return map; // 지정한 이름으로 값을 꺼내오기 위해 Map 형식으로 메소드 리턴 타입을 변경함
 	}
 	
-	// ==================== 댓글 수정 조회 ==================== 
-	@GetMapping("/reply/reply/{rno}")
-	public ReplyVO getReply(@PathVariable("rno") int rno){
-		System.out.println("---------------------------------------------------------------------------------");
-		log.info("rno" + rno);
-		return rService.getReply(rno);
-	}
-	
-	// ==================== 댓글 등록 처리 ==================== 
+	// ==================== 댓글 수정 처리 ==================== 
 		@PostMapping("/reply/update")
-		public Map<String, Object> update(@RequestBody ReplyVO vo){ // JSON 객체를 가져오기 위해 @RequestBody 사용 * 문자열을 내가 원하는 객체에 알맞게 셋팅해준다.
+		public Map<String, Object> update(@RequestBody ReplyVO vo){ 
 			System.out.println("---------------------------------------------------------------------------------");
 			log.info("수정 : " + vo);
 			
@@ -76,7 +85,8 @@ public class ReplyController {
 	/*
 	 *      ▶ ▶ ▶ @RequestBody
 	 * 		JSON 데이터를 원하는 타입으로 바인딩 처리
-	 */
+	 * 		파라미터를 자동으로 수집하여 객체를 만들어줌 
+	 */		
 	// ==================== 댓글 등록 처리 ==================== 
 	@PostMapping("/reply/insert")
 	public Map<String, Object> insert(@RequestBody ReplyVO vo){ // JSON 객체를 가져오기 위해 @RequestBody 사용 * 문자열을 내가 원하는 객체에 알맞게 셋팅해준다.
