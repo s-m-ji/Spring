@@ -35,6 +35,7 @@
 	
 	    <!-- Custom js (MI, 2023/07/07) -->
     <script src='/resources/js/custom.js'></script>
+    
     <script src="https://kit.fontawesome.com/bc0f5040fb.js" crossorigin="anonymous"></script>
 	
 	<style> 
@@ -87,6 +88,9 @@
 		}
 		
 		sup {font-size: 1.2rem;}
+		
+		
+		#page-wrapper {    min-height: 0 !important;}
 		
 	</style>
 </head>

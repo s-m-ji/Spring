@@ -94,6 +94,34 @@
      	background-color:#dfdfdf;
      }
      
+     @font-face {
+		  font-family: "SUITE-Regular";
+		  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
+		    format("woff2");
+		  font-weight: 400;
+		  font-style: normal;
+	}
+	:not(i) {
+	  font-family: "SUITE-Regular" !important;
+	} 
+		
+	th, td {
+		vertical-align: middle;
+	}
+	
+	i {
+		cursor: pointer;
+	    padding: 5px;
+	}
+	
+	i:hover {
+		background: #cdff00;
+	}
+	
+	.page-item {
+		cursor: pointer;
+	}
+     
     </style>
 
     <!-- Custom styles for this template -->
@@ -101,6 +129,11 @@
     
     <!-- Custom js (MI, 2023/07/06) -->
     <script src='/resources/js/custom.js'></script>
+    <script src='/resources/js/reply.js'></script>
+    
+    <!-- fontawesome 폰트 -->
+    <script src="https://kit.fontawesome.com/bc0f5040fb.js" crossorigin="anonymous"></script>
+    
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -131,7 +164,7 @@
               <a class="nav-link disabled">Disabled</a>
             </li>
           </ul>
-          <form class="d-flex" role="search">
+          <!-- <form class="d-flex" role="search">
           <select class="form-select" aria-label="Default select example">
 			  <option selected>전체 검색</option>
 			  <option value="1">One</option>
@@ -147,7 +180,7 @@
             <button class="btn btn-outline-success" type="submit">
               Search
             </button>
-          </form>
+          </form> -->
         </div>
       </div>
     </nav>

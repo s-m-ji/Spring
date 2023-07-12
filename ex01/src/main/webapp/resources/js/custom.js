@@ -46,16 +46,40 @@
 	 
 	 // ▶▶▶  게시글 삭제 관련
 	 function deleteBook() {
-	    const delList = document.querySelectorAll('[name=bno]:checked');
-	    let delNo = Array.from(delList).map(e => e.value).join(',');
-	    console.log(delNo);
-	    
-	    const delNoInput = document.getElementById('delNoInput');
-	    delNoInput.value = delNo;
-	    
-	    const deleteForm = document.getElementById('deleteForm');
-	    deleteForm.submit();
-	}
+		 const delList = document.querySelectorAll('[name=bno]:checked');
+		 let delNo = Array.from(delList).map(e => e.value).join(',');
+		 console.log(delNo);
+		 
+		 const delNoInput = document.getElementById('delNoInput');
+		 delNoInput.value = delNo;
+		 
+		 const deleteForm = document.getElementById('deleteForm');
+		 deleteForm.submit();
+	 }
+	 
+	 
+	// 체크박스들을 모두 선택/해제하는 함수
+	 function toggleCheckboxes() {
+	   var adminChkBox = document.getElementById('adminChkBox');
+	   var isChecked = adminChkBox.checked;
+
+	   var chkBox = document.getElementsByClassName('chkBox');
+
+	   for (var i = 0; i < chkBox.length; i++) {
+		   chkBox[i].checked = isChecked;
+	   }
+	 }
+	 
+	 // window 로딩되고 나면 버튼 클릭 이벤트 실행 가능 
+	 window.addEventListener('load', function(){
+		 
+		 var adminChkBox = document.getElementById('adminChkBox');
+		 adminChkBox.addEventListener('click', toggleCheckboxes);
+		 
+		 var allClick = document.getElementById('allClick');
+		 allClick.addEventListener('click', addCheck);
+
+	  });
 	 
 	 
 	 // ▶▶▶  게시글 등록/수정 관련
@@ -64,7 +88,7 @@
 		postForm.submit();
 	}*/
 
-	 // ▶▶▶  페이지네이션
+	 // ▶▶▶  게시글 페이지네이션
 	function go(page){
 		//e.preventDefault();
 		document.searchForm.action = "./list";

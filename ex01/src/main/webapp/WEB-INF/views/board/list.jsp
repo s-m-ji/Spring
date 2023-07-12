@@ -18,7 +18,7 @@
       </div>
       
 		<form id="deleteForm" action="./delete">
-		    <input id="bnoInput" type="hidden" name="bno" value="">
+		    <input id="delNoInput" type="hidden" name="bno" value="">
 		</form>
 
 	<%@ include file="../common/searchForm.jsp" %>
@@ -30,6 +30,10 @@
 		    </div>
 			</c:when>
 			<c:otherwise>
+			 <div>
+			 	✅ 전체 선택
+              	<input type="checkbox" id="adminChkBox" value="">
+            </div>
 				<c:forEach items="${list}" var="book">
 		        <a
 		          <%-- href="./view?bno=${book.bno}&pageNo=${pDto.cri.pageNo}" --%>
@@ -49,7 +53,7 @@
 		          <!-- <i class="bi bi-emoji-sunglasses-fill" style="font-size:20px"></i> -->
 		          <div class="d-flex gap-2 w-100 justify-content-between">
 		            <div>
-		              	<input type="checkbox" name="bno" value="${book.bno}">
+		              	<input type="checkbox" class="chkBox" name="bno" value="${book.bno}">
 		            </div>
 		            <div>
 		              	<p class="mb-0 opacity-75">${book.bno}</p>

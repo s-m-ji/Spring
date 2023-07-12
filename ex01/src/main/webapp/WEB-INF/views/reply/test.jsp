@@ -1,30 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <style>
-	i {
-		cursor: pointer;
-	}
-	table {
-		width: 100%;
-	}
-	.reply td {
-		text-align: left;
-	}
-	figure:nth-child(odd){
-		background-color:lavender;
-	}
-	.page-item {
-		cursor: pointer;
-	}
-	.pagination>li>a, .pagination>li>span {
-		color:#6610f2;
-	}
-</style>
+i {
+	cursor: pointer;
+}
 
+table {
+	width: 100%;
+}
+
+.reply td {
+	text-align: left;
+}
+
+figure:nth-child(odd) {
+	background-color: lavender;
+}
+
+.page-item {
+	cursor: pointer;
+}
+
+.pagination>li>a, .pagination>li>span {
+	color: #6610f2;
+}
+</style>
+<script src='/resources/js/reply.js'></script>
 <title>test.jsp</title>
 
 <script type="text/javascript">
@@ -54,29 +59,32 @@
 			
 			let nowDate = new Date(); // 현재 날짜/시각 가져오기
 		    let replyDate = new Date(reply.replydate); // reply.replydate를 Date 객체로 변환
-		    let date = (nowDate.toDateString() !== replyDate.toDateString()) ? reply.updatedate : reply.replydate; // 현재 날짜/시각과 reply.replydate 비교하여 값 결정
+		    let date = (nowDate.toDateString() !== replyDate.toDateString()) ? reply.replydate : reply.updatedate; // 현재 날짜/시각과 reply.replydate 비교하여 값 결정
 					
 			replyDiv.innerHTML 
 			+= '<figure id="reply'+ index +'" data-value="' + reply.reply + '" data-rno="' + reply.rno + '">' // 인덱스 값 활용하여 id를 다르게 부여 
 			
-			+ 	'<table class="reply"><tr><td width="95%"><blockquote class="blockquote">'
-			+ 		'<p>' + reply.reply + '</td><td> <font color="#6610f2">'
-			+			' <i id="btnEdit" class="fa-solid fa-square-pen" onclick="rpEdit('+ index +', '+ reply.rno +')"></i>'
+			+ 	''
+			+		'<input type="checkbox" name="adminDel" value="'+ reply.rno +'">'
+			+		'<blockquote class="blockquote">'
+			+ 		'<p>' + reply.reply + ' <font color="#6610f2">'
+			+			' &nbsp; <i id="btnEdit" class="fa-solid fa-square-pen" onclick="rpEdit('+ index +', '+ reply.rno +')"></i>'
 			+			' <i id="btnDelete" class="fa-solid fa-trash" onclick="rpDelete('+ reply.rno +')"></i>'
 			+		'</font> </p>'
-			+ 	'</blockquote></td></tr>'
+			+ 	'</blockquote>'
 			
-			+ 	'<tr><td colspan="2"><figcaption class="blockquote-footer"> <font color="#6610f2">'
+			+ 	'<figcaption class="blockquote-footer"> <font color="#6610f2">'
 			+  		''+ reply.replyer + '</font> <cite title="Source Title"> &nbsp;' + date + '</cite>'
-			+ 	'</figcaption></td></tr></table>'
+			+ 	'</figcaption>'
 			
 			+'</figure>';
 		}); 
+		
+		replyDiv.innerHTML += '<button class="btn btn-outline-secondary" type="button" id="btnAdminDel" onclick="rpDelete('+ reply.rno +')">관리자 삭제</button>'; // replyDiv 초기화 ~
 	
 		// [댓글 리스트 페이지네이션]
 		let disabledP = (pDto.prev == false)? 'disabled':"";
 		let disabledN = (pDto.next == false)? 'disabled':"";
-		let active = (pDto.cri.pageNo == i)? 'active':"";
 		let goP = (pDto.prev == false)? 1 : (pDto.startNo - 1);
 		let goN = (pDto.endNo + 1) > pDto.realEndNo ? pDto.realEndNo : (pDto.endNo + 1);
 		
@@ -85,6 +93,7 @@
 		  '     <li class="page-item  '+ disabledP +'" onclick="goPage('+ goP +')"><a class="page-link" > ◀ </a></li>';
 
 		for (var i = pDto.startNo; i <= pDto.endNo; i++) {
+		let active = (pDto.cri.pageNo == i)? 'active':"";
 		  pageBlock +=
 		    '     <li class="page-item '+ active +'" onclick="goPage('+ i + ')"><a class="page-link">'+ i +'</a></li>';
 		}
@@ -96,7 +105,7 @@
 
 		replyDiv.innerHTML += pageBlock;
 	}
-	
+
 	
 	// 댓글 리스트 페이지네이션 버튼 액션: n쪽 보여주기
 	function goPage(page) {
@@ -122,7 +131,7 @@
 	// 댓글 수정 처리 
 	function rpEditAction(rno){
 		let reply = document.querySelector('#replyEdit' + rno).value;
-		let replyer = document.querySelector('#replyer').value;
+		// let replyer = document.querySelector('#replyer').value;
 		
 		let replyObj = {
 				rno : rno
@@ -151,32 +160,7 @@
 			alert(map.message);
 		}		
 	}
-	
-	
-	// Get방식 fetch : url과 함수(callback)를 매개변수로 함
-	function fetchGet(url, callback){
-		try{
-		fetch(url)
-			.then(response => response.json())
-			.then(map => callback(map))
-		} catch(e){
-			console.log('fetchGet', e);
-		}
-	}
 
-	// Post방식 fetch : url과 obj(객체), 함수(callback)를 매개변수로 함
-	function fetchPost(url, obj, callback){
-		try{
-			fetch(url
-					, {method : 'post' 
-						, headers : {'Content-Type' : 'application/json'}
-						, body : JSON.stringify(obj)})
-				.then(response => response.json())
-				.then(map => callback(map))
-		} catch(e){
-			console.log('fetchPost', e);
-		}
-	}
 	
 	
 	// 페이지 로딩 된 후에 실행될 함수들
@@ -225,14 +209,18 @@
 </head>
 <body>
 	<br>
-	<h3>댓그르르르 🤗🤗</h3>	
-		<!-- <input type="text" name="bno" id="bno" value="1" class="form-control"> --><!-- 게시글 번호 : list 페이지에서 받아올거라 주석처리함 -->
-		<input type="text" name="page" id="page" value="1" class="form-control"> <!-- 댓글 리스트 페이지 번호 -->
-		  <input type="text" class="form-control" placeholder="미미" id="replyer">
-		<div class="input-group mb-3">
-		  <input type="text" class="form-control" placeholder="아르르" id="reply">
-		  <button class="btn btn-outline-secondary" type="button" id="btnWrite">댓글 작성</button>
-		</div>
+	<h3>댓그르르르 🤗🤗</h3>
+	<!-- <input type="text" name="bno" id="bno" value="1" class="form-control"> -->
+	<!-- 게시글 번호 : list 페이지에서 받아올거라 주석처리함 -->
+	<input type="text" name="page" id="page" value="1" class="form-control">
+	<!-- 댓글 리스트 페이지 번호 -->
+	<input type="text" class="form-control" placeholder="미미" id="replyer">
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" placeholder="아르르" id="reply">
+		<button class="btn btn-outline-secondary" type="button" id="btnWrite">댓글
+			작성</button>
+
+	</div>
 	<div id="replyDiv"></div>
 </body>
 </html>

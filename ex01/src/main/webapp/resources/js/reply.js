@@ -1,0 +1,230 @@
+/**
+ * 댓글 관련 스크립트 모음
+ */
+	// Get방식 fetch : 요청(url)과 함수(callback)를 매개변수로 함
+	function fetchGet(url, callback){
+		try{
+		fetch(url)
+			.then(response => response.json())
+			.then(map => callback(map));
+		} catch(e){
+			console.log('fetchGet', e);
+		}
+	}
+
+	// Post방식 fetch : 요청(url)과  객체(obj) 그리고 함수(callback)를 매개변수로 함
+	function fetchPost(url, obj, callback){
+		try{
+			fetch(url
+					, {method : 'post' 
+						, headers : {'Content-Type' : 'application/json'}
+						, body : JSON.stringify(obj)})
+				.then(response => response.json())
+				.then(map => callback(map));
+		} catch(e){
+			console.log('fetchPost', e);
+		}
+	}
+	
+	function getReplyList(){
+		let bno = document.querySelector('#bno').value;
+		let page = document.querySelector('#page').value
+		
+		fetchGet(`/reply/list/${bno}/${page}`, replyView);
+	}
+	
+	
+	function replyView(map) {
+	  let list = map.list;
+	  let pDto = map.pDto;
+	  console.log('list', list);
+	 
+	  // list가 비어있을 경우에 대한 처리 ! 
+	  	  if(list.length == 0) {
+		  //if(!list) { // 이렇게 적으면 false일 때만 처리되어서 안된다고 하심..!
+		  replyDiv.innerHTML = "<h4>🙋‍♀️ 댓글이 아직 up9yo 🙋‍♀️</h4>";
+		  
+	  } else {
+		  
+		  replyDiv.innerHTML = "<h4>💬 댓글 목록 💬</h4>";
+
+		  let replyDivStr =
+		    '<table class="table text-break text-center">' 
+		    +'   <thead class="table-dark">' 
+		    +'     <tr>' 
+		    +'       <th scope="col" class="col-1">관리자 모드</th>' 
+		    +'       <th scope="col" class="col-6">내용</th>' 
+		    +'       <th scope="col" class="col-3">작성자/날짜</th>' 
+		    +'     </tr>' 
+		    +'   </thead>' 
+		    +'   <tbody>';
+		  
+		  /*
+		  for (var i = 0; i < list.length; i++) {
+		    replyDivStr +=
+		      '<tr>' +
+		      '  <td>' + list[i].reply + '</td>' +
+		      '  <td>' + list[i].replyer + '</td>' +
+		      '  <td>' + list[i].replydate + '</td>' +
+		      '</tr>';
+		  } 
+		  */
+		  
+		  list.forEach(rp => {
+			  // 수정 시 화면에 날짜를 updatedate로 보여주기
+			  nowDate = new Date();
+			  rpDate = new Date(rp.replydate);
+			  date = (nowDate.toDateString() !== rpDate.toDateString()) ? rp.replydate : rp.updatedate;
+			
+			  replyDivStr +=
+			      '<tr id="trReply'+ rp.rno +'" data-value="'+ rp.reply +'" data-rno="'+ rp.rno +'">' 
+			      +'  <td><input type="checkbox" class="chkBox" name="bno" value="'+ rp.rno +'"></td>' 
+			      +'  <td class="text-start"><b>'+ rp.reply +'</b>'
+			      +'	<i id="btnEdit" class="bi bi-pencil-fill" onclick="rpEdit('+ rp.rno +');"></i>'
+			      +'	<i id="btnDel" onclick="rpDelete('+ rp.rno +');" class="bi bi-trash3-fill"></i></td>' 
+			      +'  <td><font color="#555"> <i class="bi bi-person-circle"></i> &nbsp;' + rp.replyer + ' </font><br> <font color="#999">'+ date +'</font></td>' 
+			      +'</tr>';
+		  });
+
+		  replyDivStr +=
+				    '</tbody>' 
+				   + '</table>';
+
+		  replyDiv.innerHTML += replyDivStr;
+		  
+		// [댓글 리스트 페이지네이션]
+			let disabledP = (pDto.prev == false)? 'disabled':"";
+			let disabledN = (pDto.next == false)? 'disabled':"";
+			let goP = (pDto.prev == false)? 1 : (pDto.startNo - 1);
+			let goN = (pDto.endNo + 1) > pDto.realEndNo ? pDto.realEndNo : (pDto.endNo + 1);
+			
+			var pageBlock = `<nav>`
+			  + ` <ul class="pagination justify-content-center">`
+			  + ` <li class="page-item ${disabledP}" onclick="goPage(1)"><a class="page-link" > ◀◀ </a></li>`
+			  + ` <li class="page-item ${disabledP}" onclick="goPage(${goP})"><a class="page-link" > ◀ </a></li>`
+			  ;
+
+			for (var i = pDto.startNo; i <= pDto.endNo; i++) {
+				let active = (pDto.cri.pageNo == i)? 'active':"";
+			  pageBlock +=
+			    ` <li class="page-item ${active}" onclick="goPage(${i})"><a class="page-link">${i}</a></li>`
+				  ;
+			}
+
+			pageBlock +=
+				` <li class="page-item ${disabledN}" onclick="goPage(${goN})"><a class="page-link"> ▶ </a></li>`
+			  +	` <li class="page-item ${disabledN}" onclick="goPage(${pDto.realEndNo})"><a class="page-link"> ▶▶ </a></li>`
+			  + `  </ul>`
+			  + ` </nav>`
+			  ;
+
+			replyDiv.innerHTML += pageBlock;
+	  }
+		  
+	}
+	
+	
+	function goPage(page){
+		document.querySelector('#page').value = page;
+		getReplyList(page);
+	}
+	
+	// 댓글 등록하기
+	function replyWrite(){
+		let bno = document.querySelector('#bno').value;
+		let reply = document.querySelector('#reply').value;
+		let replyer = document.querySelector('#replyer').value;
+		
+		let obj = { // 전달할 객체로 생성 : JSON 문자열로 만드는 것 보다 JSON 객체로 하는게 쉽다구
+			bno : bno	
+			, reply : reply
+			, replyer : replyer
+		};
+		console.log('obj', obj);
+		
+		fetchPost('/reply/insert', obj, replyRes);
+	}
+	
+	// 댓글 삭제 처리
+	function rpDelete(rno){
+		fetchGet(`/reply/delete/${rno}`, replyRes);
+	}
+	
+	
+	// 댓글 일괄 삭제 관련
+	 function deleteReply() {
+	    const delList = document.querySelectorAll('[class=chkBox]:checked');
+	    let delNo = Array.from(delList).map(e => e.value).join(',');
+	    console.log(delNo);
+	    
+	    const delNoInput = document.getElementById('delNoInput');
+	    delNoInput.value = delNo;
+	    
+	    rpDelete(delNo);
+	}
+	 
+	 
+	// 댓글 수정화면 보여주기
+	function rpEdit(rno){
+		let trReply = document.querySelector("#trReply"+rno);
+		let replyTxt = trReply.dataset.value; 
+		let replyRno = trReply.dataset.rno; 
+
+		trReply.innerHTML = 
+			` <td colspan="3"> `
+			+ `  <div class="input-group">  `
+			+ `  <span class="input-group-text">댓글 수정</span>   `
+			+ `  <input type="text" id="reply${rno}" value="${replyTxt}" placeholder="내용" class="form-control">  `
+			+ `  <input type="button" onclick="rpEditAction(${rno})" class="input-group-text" value="완료">  `
+			+ `  </div> `
+			+ ` </td> `
+			;
+	}
+	
+	// 댓글 수정하기
+	function rpEditAction(rno){
+		let reply = document.querySelector('#reply' + rno).value;
+		
+		let obj = {
+				rno : rno	
+				, reply : reply
+		};
+		console.log('obj', obj);
+		
+		let url = '/reply/update';
+		fetchPost(url, obj, replyRes);
+	}
+	
+	
+	// 댓글 등록, 수정, 삭제의 결과를 처리 : 조회를 제외하고는 모두 반환이 int임
+	function replyRes(map){
+		// 성공 : 리스트 조회 및 출력
+		// 실패 : 메세지 출력
+		console.log('map', map);
+		
+		if (map.result == "success"){
+			getReplyList();
+			
+			// 댓글 등록, 수정 후 화면 조회 시 입력창 초기화
+			document.querySelector('#reply').value = "";
+			document.querySelector('#replyer').value = "";
+		} else {
+			alert(map.message);
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

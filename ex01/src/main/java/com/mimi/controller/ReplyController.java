@@ -47,8 +47,8 @@ public class ReplyController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		System.out.println("---------------------------------------------------------------------------------");
-		log.info("bno" + bno);
-		log.info("page" + page);
+		log.info("bno : " + bno);
+		log.info("page : " + page);
 		
 		// 페이징 처리
 		Criteria cri = new Criteria();
@@ -89,17 +89,24 @@ public class ReplyController {
 	 */		
 	// ==================== 댓글 등록 처리 ==================== 
 	@PostMapping("/reply/insert")
-	public Map<String, Object> insert(@RequestBody ReplyVO vo){ // JSON 객체를 가져오기 위해 @RequestBody 사용 * 문자열을 내가 원하는 객체에 알맞게 셋팅해준다.
+	public Map<String, Object> insert(@RequestBody ReplyVO vo){ 
+						// JSON 객체를 가져오기 위해 @RequestBody 사용 * 문자열을 내가 원하는 객체 타입(예시.ReplyVO)에 알맞게 셋팅해준다.
 		System.out.println("---------------------------------------------------------------------------------");
 		log.info("등록 : " + vo);
-		
-		int res = rService.insert(vo);		
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(res>0) {
-			map.put("result", "success");
-		} else {
+		
+		try {
+			int res = rService.insert(vo);		
+			if(res>0) {
+				map.put("result", "success");
+			} else {
+				map.put("result", "fail");
+				map.put("message", "댓글 등록 중 예외 사항 발생");
+			}
+			
+		} catch (Exception e) {
 			map.put("result", "fail");
-			map.put("message", "댓글 등록 중 예외 사항 발생");
+			map.put("message", e.getMessage());
 		}
 		
 		return map;
@@ -107,22 +114,36 @@ public class ReplyController {
 	
 	// ==================== 댓글 삭제 처리 ==================== 
 	@GetMapping("/reply/delete/{rno}")
-	public Map<String, Object> delete(@PathVariable("rno") int rno){
+	public Map<String, Object> delete(@PathVariable("rno") List<Integer> delList){ // 여러개 삭제하려고 List 형태로 변경
 		System.out.println("---------------------------------------------------------------------------------");
-		log.info("rno" + rno);
-		
-		int res = rService.delete(rno);
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(res>0) {
-			map.put("result", "success");
-		} else {
-			map.put("result", "fail");
-			map.put("message", "댓글 삭제 중 예외 사항 발생");
+		
+		for (int rno : delList) {
+			int res = rService.delete(rno);
+			
+			if(res>0) {
+				map.put("result", "success");
+				
+			} else {
+				map.put("result", "fail");
+				map.put("message", "댓글 삭제 중 예외 사항 발생");
+			}
 		}
 		
 		return map;
 	}
-	
+	/*
+	 * @GetMapping("/reply/delete/{rno}") public Map<String, Object>
+	 * delete(@PathVariable("rno") int rno){ System.out.println(
+	 * "---------------------------------------------------------------------------------"
+	 * ); log.info("rno : " + rno);
+	 * 
+	 * int res = rService.delete(rno); Map<String, Object> map = new HashMap<String,
+	 * Object>(); if(res>0) { map.put("result", "success"); } else {
+	 * map.put("result", "fail"); map.put("message", "댓글 삭제 중 예외 사항 발생"); }
+	 * 
+	 * return map; }
+	 */	
 	
 }
 

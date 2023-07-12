@@ -12,28 +12,28 @@
   let failMsg = "${failMsg}";
   let passMsgPost = "${passMsgPost}";
   
-  window.onload = function() {
-	  
-	//history.replaceState({},null,null); TODO 등록/삭제 작업 완료 후 브라우저에서 뒤로가기 버튼을 클릭하는 것에 대한 처리가 필요함
-	  
-    const myModal = new bootstrap.Modal('#myModal', {
-      keyboard: true
-    });
-
-    const message = passMsg || failMsg || passMsgPost;
-    const redirectUrl = passMsg ? "/board/list" : `/board/view?bno=${book.bno}&pageNo=${param.pageNo}`;
-
-    if (message) {
-      document.querySelector(".modal-body").innerHTML = message;
-      myModal.show(200);
-
-      const myModalEl = document.getElementById('myModal');
-
-      myModalEl.addEventListener('hidden.bs.modal', () => {
-        redirectUrl === (window.location.href = redirectUrl);
-      });
-    }
-  };
+  // window.onload = function() {
+	  window.addEventListener('load', function(){
+		  
+	    const myModal = new bootstrap.Modal('#myModal', {
+	      keyboard: true
+	    });
+	
+	    const message = passMsg || failMsg || passMsgPost;
+	    const redirectUrl = passMsg ? "/board/list" : `/board/view?bno=${book.bno}&pageNo=${param.pageNo}`;
+	
+	    if (message) {
+	      document.querySelector(".modal-body").innerHTML = message;
+	      myModal.show(200);
+	
+	      const myModalEl = document.getElementById('myModal');
+	
+	      myModalEl.addEventListener('hidden.bs.modal', () => {
+	        redirectUrl === (window.location.href = redirectUrl);
+	      });
+	    }
+	  });
+  //}
 </script>
 
 </head>

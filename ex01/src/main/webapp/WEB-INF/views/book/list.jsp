@@ -49,7 +49,7 @@
                             <!-- <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example"> -->
                                 <thead>
                                     <tr>
-                                        <th>선택</th>
+                                        <th>전체 선택 <input type="checkbox" id="" name="bno" value="${book.idx}"></th>
                                         <th>책 번호</th>
                                         <th>도서명</th>
                                         <th>작가명</th>
@@ -86,8 +86,11 @@
 											<td width="15%">
 											    <c:if test="${book.return_date == null}" var="res">
 											        <c:choose>
-											            <c:when test="${book.rest_date > 0 and book.rest_date <= 5 }">
+											            <c:when test="${book.rest_date > 0 and book.rest_date <= 3 }">
 											                <span class="point rest orange"><font color="orangered">${date}</font> 일 남음</span>
+											            </c:when>
+											            <c:when test="${book.rest_date eq 0}">
+											                <span class="point rest orange">오늘까지 반납</span>
 											            </c:when>
 											            <c:when test="${book.rest_date < 0}">
 											                <span class="point rest red">기한 경과</span>
