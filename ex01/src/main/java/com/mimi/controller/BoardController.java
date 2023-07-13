@@ -152,20 +152,38 @@ public class BoardController {
 	 * ▶ ▶ ▶ 게시글 수정 완료 후 폼 처리
 	 */
 	@PostMapping("edit")
-	public String editPost(RedirectAttributes rdAttr, BoardVO board) {
+	public String editPost(RedirectAttributes rdAttr, BoardVO board, Criteria cri) {
+		// pageNo를 쓰기 위해 매개변수에 Criteria 사용하여 파라미터를 자동 수집함
+		
+		// ?pageNo=1
+		// request.getParam("pageNO");
+		// ${param.pageNo}
+		
+		// request.getAttribute("pageNo");
+		// ${pageNo}
 		int res = bService.update(board); 
 		String msg = "";
 		if(res>0) {
 			System.out.println("******************** edit 성공");
 			 msg = board.getBno() + "번 글 edit 성공";
-			 rdAttr.addFlashAttribute("passMsgPost" , msg); 
-			 rdAttr.addFlashAttribute("book" , board);
+			 
+			 // session에 저장되었다가 사라짐
+			 // rdAttr.addFlashAttribute("passMsgPost" , msg); 
+			 // rdAttr.addFlashAttribute("book" , board);
+			 
+			 // 파라미터로 넘겨주는 것
+			 rdAttr.addAttribute("passMsgPost" , msg); 
+			 rdAttr.addAttribute("book" , board);
+			 rdAttr.addAttribute("pageNo" , cri.getPageNo());
+			 rdAttr.addAttribute("sField" , cri.getSField());
+			 rdAttr.addAttribute("sWord" , cri.getSWord());
 			 log.info(board);
 			 System.out.println("res : " + res);
 		} else {
 			System.out.println("******************** edit 실패");
 			msg = board.getBno() + "번 글  edit 실패";
-			rdAttr.addFlashAttribute("failMsg" , msg);
+			// rdAttr.addFlashAttribute("failMsg" , msg);
+			rdAttr.addAttribute("failMsg" , msg);
 			log.debug(board);
 			System.out.println("res : " + res);
 		}

@@ -11,7 +11,7 @@
 	// window.onload = function(){  // 댓글 파일인 test.jsp 안에 적어둔 window.onload와 중복되면서 기능이 실행되지않음
 		
 	/* 
-	스크립트로 액션을 제어하면 좋은 점: 버튼 클릭 액션을 한눈에 확인할 수도 있고, 파라미터 값을 넘겨야할 경우에도 form에 넣어서 전송하면 깔끔함
+	스크립트로 액션을 제어하면 좋은 점: 버튼 클릭 액션을 한눈에 확인할 수도 있고, 파라미터 값을 넘겨야할 경우에도 href에 쿼리스트링을 길게 늘여쓰는 것보다는 form에 넣어서 전송하면 깔끔함
 	 */
 	 window.addEventListener('load', function(){
 		
@@ -43,6 +43,8 @@
 		getReplyList();
 		 
 	//}
+		 var adminChkBox = document.getElementById('adminChkBox');
+		 adminChkBox.addEventListener('click', toggleCheckboxes);
 	
 	});
 		
@@ -61,7 +63,7 @@
 			<!-- 상세/수정 화면에서 다시 목록으로 돌아갈 때  필요한 값들을 input 태그로 form에 넣어두었음-->
 			<input type="text" name="bno" id="bno" value="${book.bno}">
 			<input type="text" name="pageNo" value="${param.pageNo}">
-			<input type="text" name="sFeild" value="${param.sFeild}">
+			<input type="text" name="sField" value="${param.sField}">
 			<input type="text" name="sWord" value="${param.sWord}">
 			
 			<input id="delNoInput" type="hidden" name="bno" value="">
@@ -120,7 +122,7 @@
 	<br><br>
 	<div class="input-group">
 	<span class="input-group-text">댓글 작성</span>
-	<input type="text" name="page" id="page" value="1" class="form-control">
+		<input type="text" name="page" id="page" class="form-control">
 	  <input type="text" id="reply" placeholder="내용" class="form-control">
 	  <input type="text" id="replyer" placeholder="작성자" class="form-control">
 	  <input type="button" aria-label="Last name" id="btnReplyWrite" class="input-group-text" value="완료">

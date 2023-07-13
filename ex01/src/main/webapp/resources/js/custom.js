@@ -70,23 +70,12 @@
 	   }
 	 }
 	 
-	 // window 로딩되고 나면 버튼 클릭 이벤트 실행 가능 
-	 window.addEventListener('load', function(){
-		 
-		 var adminChkBox = document.getElementById('adminChkBox');
-		 adminChkBox.addEventListener('click', toggleCheckboxes);
-		 
-		 var allClick = document.getElementById('allClick');
-		 allClick.addEventListener('click', addCheck);
-
-	  });
-	 
 	 
 	 // ▶▶▶  게시글 등록/수정 관련
-	/*function requestAction(url) {
+	function action(url) {
 		postForm.action = url;
 		postForm.submit();
-	}*/
+	}
 
 	 // ▶▶▶  게시글 페이지네이션
 	function go(page){

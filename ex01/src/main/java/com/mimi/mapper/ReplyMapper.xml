@@ -7,7 +7,7 @@
 <select id="getList" resultType="com.mimi.vo.ReplyVO">
 	SELECT * FROM 
 		( SELECT t.*, ROWNUM rn FROM (
-			SELECT bno, rno, reply, replyer, TO_CHAR(replyDate, 'yyyy/MM/dd HH24:MI:SS') AS replyDate, updateDate
+			SELECT bno, rno, reply, replyer, TO_CHAR(replyDate, 'yyyy-MM-dd  ,  HH24:MI:SS') AS replyDate, TO_CHAR(updateDate, 'yyyy-MM-dd  ,  HH24:MI:SS') AS updateDate
 				 FROM tbl_reply WHERE bno = #{bno} ORDER BY rno DESC 
 				) t
 			) WHERE rn BETWEEN #{cri.startNo} AND #{cri.endNo}

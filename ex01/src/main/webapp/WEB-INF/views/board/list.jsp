@@ -6,6 +6,15 @@
 <head>
 <meta charset="UTF-8">
 <title>list.jsp</title>
+<script>
+	//window 로딩되고 나면 버튼 클릭 이벤트 실행 가능 
+	window.addEventListener('load', function(){
+		 
+		 var adminChkBox = document.getElementById('adminChkBox');
+		 adminChkBox.addEventListener('click', toggleCheckboxes);
+		 
+	 });
+</script>
 </head>
 <body>
 	<%@ include file="../common/header.jsp" %>
@@ -41,32 +50,14 @@
 		          onclick="requestAction('./view', ${book.bno})"
 		          class="list-group-item list-group-item-action d-flex gap-3 py-3"
 		          aria-current="true"
-		          target="_blank"
 		        >
-		         <!-- <img
-		            src="https://github.com/twbs.png"
-		            alt="twbs"
-		            width="32"
-		            height="32"
-		            class="rounded-circle flex-shrink-0"
-		          /> -->
-		          <!-- <i class="bi bi-emoji-sunglasses-fill" style="font-size:20px"></i> -->
+		         
 		          <div class="d-flex gap-2 w-100 justify-content-between">
-		            <div>
-		              	<input type="checkbox" class="chkBox" name="bno" value="${book.bno}">
-		            </div>
-		            <div>
-		              	<p class="mb-0 opacity-75">${book.bno}</p>
-		            </div>
-		            <div>
-		              <h6 class="mb-0">${book.title}</h6>
-		            </div>
-		            <div>
-		              <p class="mb-0 opacity-75">${book.content}</p>
-		            </div>
-		            <div>
-		              <p class="mb-0 opacity-75">${book.writer}</p>
-		            </div>
+		            <div><input type="checkbox" class="chkBox" name="bno" value="${book.bno}"></div>
+		            <div><p class="mb-0 opacity-75">${book.bno}</p></div>
+		            <div><h6 class="mb-0">${book.title}</h6></div>
+		            <div><p class="mb-0 opacity-75">${book.content}</p></div>
+		            <div><p class="mb-0 opacity-75">${book.writer}</p></div>
 		            <small class="opacity-50 text-nowrap">${book.regdate}</small>
 		            <small class="opacity-50 text-nowrap">${book.updatedate}</small>
 		          </div>

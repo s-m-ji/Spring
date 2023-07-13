@@ -38,8 +38,10 @@ public class MemberController {
 		//System.out.println("PW : " + member.getPw());
 		//System.out.println("NAME : " + member.getName());
 		
-		service.login(member, rdAttr);
+		//service.login(member, rdAttr);
 		//model.addAttribute("message", member.getId() + " 환상의 나라로 오세요 ~ 🎈🎆✨🎉🎢🎪🎠🎡  ");
+		
+		service.getMember();
 		
 		System.out.println("-------- MemberController service 실행 완료");
 		

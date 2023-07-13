@@ -1,18 +1,15 @@
 package com.mimi.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.mimi.dao.MemberDao;
 import com.mimi.vo.Member;
 
 @Service // 서비스 어노테이션을 달아야 자동 인식
-public class MemberService {
+public interface MemberService {
 	
-	@Autowired // new MemberDao() 생성 과정을 생략할 수 있음
-	MemberDao dao;
+	/*
+	// @Autowired // new MemberDao() 생성 과정을 생략할 수 있음
+	// MemberDao dao;
 	
 	public Member login(Member paramMember, RedirectAttributes rdAttr) {
 		Member member = dao.login(paramMember);
@@ -26,4 +23,7 @@ public class MemberService {
 		}
 		return member;
 	}
+	*/
+	
+	public Member getMember();
 }

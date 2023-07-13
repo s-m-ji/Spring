@@ -26,9 +26,15 @@
 		}
 	}
 	
-	function getReplyList(){
+	function getReplyList(page){
 		let bno = document.querySelector('#bno').value;
-		let page = document.querySelector('#page').value
+		
+		// falsey : false, 0, "", NaN, undefined, null
+		// falsey한 값 외의 것들이 들어있으면 true를 반환
+
+		if(!page){ // page의 값이 없으면 1로 셋팅하기 위함
+			page = 1;
+		} 
 		
 		fetchGet(`/reply/list/${bno}/${page}`, replyView);
 	}
@@ -40,8 +46,7 @@
 	  console.log('list', list);
 	 
 	  // list가 비어있을 경우에 대한 처리 ! 
-	  	  if(list.length == 0) {
-		  //if(!list) { // 이렇게 적으면 false일 때만 처리되어서 안된다고 하심..!
+	  if(list.length == 0) {
 		  replyDiv.innerHTML = "<h4>🙋‍♀️ 댓글이 아직 up9yo 🙋‍♀️</h4>";
 		  
 	  } else {
@@ -58,23 +63,13 @@
 		    +'     </tr>' 
 		    +'   </thead>' 
 		    +'   <tbody>';
-		  
-		  /*
-		  for (var i = 0; i < list.length; i++) {
-		    replyDivStr +=
-		      '<tr>' +
-		      '  <td>' + list[i].reply + '</td>' +
-		      '  <td>' + list[i].replyer + '</td>' +
-		      '  <td>' + list[i].replydate + '</td>' +
-		      '</tr>';
-		  } 
-		  */
+
 		  
 		  list.forEach(rp => {
-			  // 수정 시 화면에 날짜를 updatedate로 보여주기
-			  nowDate = new Date();
+			  // 수정 시 화면에 날짜를 updatedate로 보여주기 
 			  rpDate = new Date(rp.replydate);
-			  date = (nowDate.toDateString() !== rpDate.toDateString()) ? rp.replydate : rp.updatedate;
+			  upDate = new Date(rp.updatedate);
+			  date = (rpDate.toDateString() !== upDate.toDateString()) ? rp.updatedate : rp.replydate ;
 			
 			  replyDivStr +=
 			      '<tr id="trReply'+ rp.rno +'" data-value="'+ rp.reply +'" data-rno="'+ rp.rno +'">' 
@@ -98,36 +93,29 @@
 			let goP = (pDto.prev == false)? 1 : (pDto.startNo - 1);
 			let goN = (pDto.endNo + 1) > pDto.realEndNo ? pDto.realEndNo : (pDto.endNo + 1);
 			
-			var pageBlock = `<nav>`
-			  + ` <ul class="pagination justify-content-center">`
-			  + ` <li class="page-item ${disabledP}" onclick="goPage(1)"><a class="page-link" > ◀◀ </a></li>`
-			  + ` <li class="page-item ${disabledP}" onclick="goPage(${goP})"><a class="page-link" > ◀ </a></li>`
+			var pageBlock = `<nav> <ul class="pagination justify-content-center">`
+			  + ` <li class="page-item ${disabledP}" onclick="getReplyList(1)"><a class="page-link" > ◀◀ </a></li>`
+			  + ` <li class="page-item ${disabledP}" onclick="getReplyList(${goP})"><a class="page-link" > ◀ </a></li>`
 			  ;
 
 			for (var i = pDto.startNo; i <= pDto.endNo; i++) {
 				let active = (pDto.cri.pageNo == i)? 'active':"";
 			  pageBlock +=
-			    ` <li class="page-item ${active}" onclick="goPage(${i})"><a class="page-link">${i}</a></li>`
+				  ` <li class="page-item ${active}" onclick="getReplyList(${i})"><a class="page-link">${i}</a></li>`
 				  ;
 			}
 
 			pageBlock +=
-				` <li class="page-item ${disabledN}" onclick="goPage(${goN})"><a class="page-link"> ▶ </a></li>`
-			  +	` <li class="page-item ${disabledN}" onclick="goPage(${pDto.realEndNo})"><a class="page-link"> ▶▶ </a></li>`
-			  + `  </ul>`
-			  + ` </nav>`
+				` <li class="page-item ${disabledN}" onclick="getReplyList(${goN})"><a class="page-link"> ▶ </a></li>`
+			  +	` <li class="page-item ${disabledN}" onclick="getReplyList(${pDto.realEndNo})"><a class="page-link"> ▶▶ </a></li>`
+			  + `  </ul> </nav>`
 			  ;
 
 			replyDiv.innerHTML += pageBlock;
-	  }
+	  	}
 		  
 	}
-	
-	
-	function goPage(page){
-		document.querySelector('#page').value = page;
-		getReplyList(page);
-	}
+
 	
 	// 댓글 등록하기
 	function replyWrite(){
