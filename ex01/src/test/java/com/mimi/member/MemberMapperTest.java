@@ -28,8 +28,9 @@ public class MemberMapperTest {
 		
 		Member m = new Member();
 		m.setId("test");
-		m.setPw("1234");
+		m.setPass("1234");
 		
-		log.info("m : " + m);
+		m = mMapper.login(m);
+		assertNotNull(m);
 	}
 }

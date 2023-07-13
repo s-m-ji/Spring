@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +22,7 @@ figure:nth-child(odd) {
 	background-color: lavender;
 }
 
-.page-item {
+.page-item:not(.disabled) {
 	cursor: pointer;
 }
 

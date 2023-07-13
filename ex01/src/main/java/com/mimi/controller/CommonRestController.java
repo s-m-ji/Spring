@@ -23,12 +23,14 @@ public class CommonRestController {
 	// map을 생성 후 result, msg를 셋팅
 	public Map<String, Object> responseMap(int res, String msg){
 		Map<String, Object> map = new HashMap<String, Object>();
-		if(res>0) {
+		
+		if(res > 0) {
 			map.put("result", "success");
+			map.put("msg", msg + " 되었습니다.");
 		} else {
 			map.put("result", "fail");
+			map.put("msg", msg + "중 예외가 발생하였습니다.");
 		}
-		map.put("message", msg);
 		
 		return map;
 	}
@@ -41,17 +43,8 @@ public class CommonRestController {
 		return responseMap(res, REST_EDIT);
 	}
 	
-	public Map<String, Object> responseDeleteMap(List<Integer> delList){
-		int res = delList != null ? 1 : 0 ;
-		return responseMap(res, REST_DELETE);
-		
-		for (int rno : delList) {
-	        
-	        Map<String, Object> deleteMap = responseDeleteMap(rService.delete(rno));
-	        map.putAll(deleteMap);
-	    }
-	    
-	    return map;
+	public Map<String, Object> responseDeleteMap(int res){
+	    return responseMap(res, REST_DELETE);
 	}
 
 	public Map<String, Object> responseListMap(List<?> list, pageDto pDto){

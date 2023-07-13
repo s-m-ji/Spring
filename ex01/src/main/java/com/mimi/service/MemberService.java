@@ -25,5 +25,5 @@ public interface MemberService {
 	}
 	*/
 	
-	public Member getMember();
+	public Member login(Member member);
 }

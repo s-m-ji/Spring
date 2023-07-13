@@ -4,103 +4,98 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<head>
+<title>login.jsp</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.104.2">
-    <title>Signin Template · Bootstrap v5.2</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sign-in/">
+	<link href="../resources/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<link href="/resources/css/signin.css" rel="stylesheet">
 
-<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      .b-example-divider {
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-      }
-
-      .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-      }
-
-      .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-      }
-
-      .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-      }
-
-      .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-    </style>
-
-    
-    <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
+    <script src="/resources/js/common.js"></script>
+    <script>
+   	window.addEventListener('load', function(){
+   		btnLogin.addEventListener('click', function(e){
+   			e.preventDefault();
+   			
+   			let obj = {
+   				id : document.querySelector('#logInputId').value
+   				, pass : document.querySelector('#logInputPass').value
+   			}
+   			
+   			console.log('obj', obj);
+   			
+   			fetchPost('loginAction', obj, loginCheck);
+   		});
+   		
+   		// 회원가입, 로그인 보기 버튼
+   		btnLoginView.addEventListener('click', function(e){
+   			loginForm.style.display = "";
+   			RegiForm.style.display = "none";
+   		});
+   		
+   		btnRegiView.addEventListener('click', function(e){
+   			loginForm.style.display = "none";
+   			RegiForm.style.display = "";
+   		});
+   	
+   	});
+   	
+   	function loginCheck(map){
+   		console.log('map', map);
+		// 로그인 성공 -> list로 이동
+		// 실패 -> 메세지 처리
+   		if (map.result == "success"){
+   			// location.replace("/board/list");
+   			location.href="/board/list";
+   		} else {
+   			getMessage.innerText = map.msg;
+   		}
+   	}
+    </script>
   </head>
   <body class="text-center">
-    
-<main class="form-signin w-100 m-auto">
-  <form>
-    <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-    <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
-    </div>
-    <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Password</label>
-    </div>
-
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
-  </form>
-</main>
-
-
-    
+	<main class="form-signin w-100 m-auto">
+	  <!-- 로그인 실패 시 메세지 처리할 공간 --><div id="getMessage"></div> 
+		<form method="post" action="loginAction" id="loginForm">
+			<img class="kero mb-4" alt="로고이미지" src="/resources/images/파일명.png">
+		    <div class="form-floating">
+		      <input type="text" class="form-control input" id="logInputId" >
+		      <label for="floatingInput">Id</label>
+		    </div>
+		    <div class="form-floating">
+		      <input type="password" class="form-control endInput" id="logInputPass" >
+		      <label for="floatingPassword">Password</label>
+		    </div>
+		    <div class="checkbox mb-3">
+		      <label> <input type="checkbox" value="remember-me"> 7l 억 ㅎH 줘 ... ☆ </label>
+		    </div>
+		    <button class="w-100 btn btn-lg btn-dark" id="btnLogin" type="submit">로그인</button>
+	  </form>
+	  
+      <form id="RegiForm" style="display:none;">
+			<img class="kero mb-4" alt="로고이미지" src="/resources/images/파일명.png">
+		    <div class="form-floating">
+		      <input type="text" class="form-control input" id="regiInputId" >
+		      <label for="id">New Id</label>
+		    </div>
+		    <div class="form-floating">
+		      <input type="password" class="form-control input" id="regiInputPass">
+		      <label for="pass">New Password</label>
+		    </div>
+		    <div class="form-floating">
+		      <input type="password" class="form-control endInput" id="regiInputPassChk">
+		      <label for="pass">New Password Check</label>
+		    </div>
+		    <button class="w-100 btn btn-lg btn-dark" type="submit">회원가입</button>
+	  </form>
+	  
+		<br>
+	  <div class="btn-group w-100" role="group" aria-label="Basic mixed styles example">
+		  <button type="button" class="btn btn-danger" id="btnRegiView">회원가입 하기</button>
+		  <button type="button" class="btn btn-warning" id="btnLoginView">로그인 하기</button>
+	</div>
+	</main>
   </body>
 </html>

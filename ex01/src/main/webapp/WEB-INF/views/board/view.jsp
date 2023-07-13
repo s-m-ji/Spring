@@ -38,6 +38,21 @@
 		btnReplyWrite.addEventListener('click', function(){
 			replyWrite();
 		});
+
+		let bno = parseInt(document.querySelector('#bno').value);
+		// 이전 글 이동 버튼
+		btnPrevPost.addEventListener('click', function() {
+		    if (bno > 1) {
+		        document.querySelector('#bno').value = --bno;
+		        postForm.submit();
+		    }
+		});
+		
+		// 다음 글 이동 버튼
+		btnNextPost.addEventListener('click', function() {
+	        document.querySelector('#bno').value = ++bno;
+	        postForm.submit();
+		});
 		
 		 // 댓글 조회 및 출력
 		getReplyList();
@@ -58,14 +73,12 @@
 	<div class="bg-light p-5 rounded">
 	<h2>📚 도서 상세 보기 📚  </h2>
 		<form name="postForm">
-		<!-- <form name="postForm"> -->
-		
 			<!-- 상세/수정 화면에서 다시 목록으로 돌아갈 때  필요한 값들을 input 태그로 form에 넣어두었음-->
-			<input type="text" name="bno" id="bno" value="${book.bno}">
+			<input type="text" name="bno" id="bno" value="${param.bno}">
 			<input type="text" name="pageNo" value="${param.pageNo}">
 			<input type="text" name="sField" value="${param.sField}">
 			<input type="text" name="sWord" value="${param.sWord}">
-			
+			<!--  다중 삭제 시 필요함 --> 
 			<input id="delNoInput" type="hidden" name="bno" value="">
 			
 			<div class="row">
@@ -100,17 +113,16 @@
 			</div>
 			</div>
 		  <br>
+		</form>
 		  <%-- <button type="button" class="btn btn-dark" onclick="requestAction('./edit', ${book.bno});">글 수정하기</button> --%>
 		  <button type="button" id="btnEditView" class="btn btn-default btn-dark" >수정하기</button>
 		  <%-- <button type="button" class="btn btn-dark" onclick="requestAction('./delete', ${book.bno});">글 삭제하기</button> --%>
 		  <button type="button" id="btnDelView" class="btn btn-default btn-dark" >삭제하기</button>
 		  <%-- <button type="button" class="btn btn-dark" onclick="location.href='./list?pageNo=${param.pageNo}'">목록 바로가기</button> --%>
 		  <button type="button" id="btnListView" class="btn btn-dark" >목록 바로가기</button>
-		  <input type="text" name="pageNo" value="${param.pageNo}">
-		</form>
-		<br>
-		  <button type="button" class="btn btn-dark" onclick="location.href='./view?bno=${book.bno -1}'">이전 글</button>
-		  <button type="button" class="btn btn-dark" onclick="location.href='./view?bno=${book.bno +1}'">다음 글</button>
+		<br><br>
+		  <button type="button" class="btn btn-dark" id="btnPrevPost">이전 글</button>
+		  <button type="button" class="btn btn-dark" id="btnNextPost">다음 글</button>
 	</div>
 	
 	<!-- 댓글 목록 -->
@@ -122,7 +134,6 @@
 	<br><br>
 	<div class="input-group">
 	<span class="input-group-text">댓글 작성</span>
-		<input type="text" name="page" id="page" class="form-control">
 	  <input type="text" id="reply" placeholder="내용" class="form-control">
 	  <input type="text" id="replyer" placeholder="작성자" class="form-control">
 	  <input type="button" aria-label="Last name" id="btnReplyWrite" class="input-group-text" value="완료">

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -81,7 +82,7 @@
 	}
      
      /* Custom CSS (MI, 2023/07/05) */
-     #kero {
+     .kero {
      	width: 75px;
      	border-radius: 50%;
      }
@@ -121,6 +122,13 @@
 	.page-item {
 		cursor: pointer;
 	}
+	
+	.point {
+            background: #adff2f96;
+		    padding: 5px 15px;
+		    border-radius: 15px;
+		    display: inline-block;
+		}
      
     </style>
 
@@ -129,6 +137,7 @@
     
     <!-- Custom js (MI, 2023/07/06) -->
     <script src='/resources/js/custom.js'></script>
+    <script src='/resources/js/common.js'></script>
     <script src='/resources/js/reply.js'></script>
     
     <!-- fontawesome 폰트 -->
@@ -139,7 +148,7 @@
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-			<img id="kero" alt="로고이미지" src="/resources/images/파일명.png">
+			<img class="kero" alt="로고이미지" src="/resources/images/파일명.png">
 		</a>
         <button
           class="navbar-toggler"
@@ -163,6 +172,9 @@
             <li class="nav-item">
               <a class="nav-link disabled">Disabled</a>
             </li>
+            <c:if test="${not empty userId}">
+	            <li class="nav-item"> <a class="nav-link"> <font color="#fff"> 🖐 <span class="point">ID : ${userId} </span> 어서옵쇼 ‍🖐 </font> </a></li>
+            </c:if>
           </ul>
           <!-- <form class="d-flex" role="search">
           <select class="form-select" aria-label="Default select example">

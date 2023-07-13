@@ -18,6 +18,7 @@
 </head>
 <body>
 	<%@ include file="../common/header.jsp" %>
+	
     <main class="container">
       <div class="bg-light p-5 rounded">
         <h1>📚 목록 보기 📚 </h1>

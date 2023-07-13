@@ -10,9 +10,9 @@ public class pageDto {
 	
 	private int startNo; // 페이지 블록의 시작번호
 	private int endNo; // 페이지 블록의 끝번호
-	int block = 5; // 페이지 블록 개수
+	int block = 3; // 페이지 블록 개수
 	
-	private int realEndNo; // 총 페이지 블록의 진정한 끝번호
+	int realEndNo; // 총 페이지 블록의 진정한 끝번호
 
 	private boolean prev, next; // 이전,다음 번호 활성화 여부
 
@@ -25,7 +25,7 @@ public class pageDto {
 		// 페이지 블럭의 시작번호
 		startNo = endNo - (block-1);
 		
-		realEndNo = (int)Math.ceil((total*1.0)/cri.getAmount());
+		realEndNo = (int)(Math.ceil((total*1.0)/cri.getAmount()));
 		
 		endNo = endNo > realEndNo ? realEndNo : endNo;
 		

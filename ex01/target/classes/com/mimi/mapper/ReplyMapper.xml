@@ -7,7 +7,9 @@
 <select id="getList" resultType="com.mimi.vo.ReplyVO">
 	SELECT * FROM 
 		( SELECT t.*, ROWNUM rn FROM (
-			SELECT bno, rno, reply, replyer, TO_CHAR(replyDate, 'yyyy-MM-dd  ,  HH24:MI:SS') AS replyDate, TO_CHAR(updateDate, 'yyyy-MM-dd  ,  HH24:MI:SS') AS updateDate
+			SELECT bno, rno, reply, replyer, TO_CHAR(replyDate, 'yyyy-MM-dd  ,  HH24:MI:SS') AS replyDate,
+												 TO_CHAR(updateDate, 'yyyy-MM-dd  ,  HH24:MI:SS') AS updateDate,
+												 		ROW_NUMBER() OVER (ORDER BY rno DESC) AS seq
 				 FROM tbl_reply WHERE bno = #{bno} ORDER BY rno DESC 
 				) t
 			) WHERE rn BETWEEN #{cri.startNo} AND #{cri.endNo}
@@ -18,11 +20,11 @@
 </insert>
 
 <delete id="delete">
- 	DELETE tbl_reply WHERE rno = #{rno}
+ 	DELETE FROM tbl_reply WHERE rno = #{rno}
 </delete>
 
 <select id="getTotalCnt" resultType="int">
- 	SELECT COUNT(*) FROM tbl_reply 
+ 	SELECT COUNT(*) FROM tbl_reply WHERE bno = #{bno}
 </select>
 
 <update id="update">

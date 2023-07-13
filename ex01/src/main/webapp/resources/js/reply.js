@@ -1,31 +1,9 @@
 /**
  * 댓글 관련 스크립트 모음
  */
-	// Get방식 fetch : 요청(url)과 함수(callback)를 매개변수로 함
-	function fetchGet(url, callback){
-		try{
-		fetch(url)
-			.then(response => response.json())
-			.then(map => callback(map));
-		} catch(e){
-			console.log('fetchGet', e);
-		}
-	}
-
-	// Post방식 fetch : 요청(url)과  객체(obj) 그리고 함수(callback)를 매개변수로 함
-	function fetchPost(url, obj, callback){
-		try{
-			fetch(url
-					, {method : 'post' 
-						, headers : {'Content-Type' : 'application/json'}
-						, body : JSON.stringify(obj)})
-				.then(response => response.json())
-				.then(map => callback(map));
-		} catch(e){
-			console.log('fetchPost', e);
-		}
-	}
 	
+console.log("-------------- reply.js 연결 완료! ----------------");
+
 	function getReplyList(page){
 		let bno = document.querySelector('#bno').value;
 		
@@ -73,7 +51,7 @@
 			
 			  replyDivStr +=
 			      '<tr id="trReply'+ rp.rno +'" data-value="'+ rp.reply +'" data-rno="'+ rp.rno +'">' 
-			      +'  <td><input type="checkbox" class="chkBox" name="bno" value="'+ rp.rno +'"></td>' 
+			      +'  <td>'+ rp.seq +' &nbsp; <input type="checkbox" class="chkBox" name="bno" value="'+ rp.rno +'"></td>' 
 			      +'  <td class="text-start"><b>'+ rp.reply +'</b>'
 			      +'	<i id="btnEdit" class="bi bi-pencil-fill" onclick="rpEdit('+ rp.rno +');"></i>'
 			      +'	<i id="btnDel" onclick="rpDelete('+ rp.rno +');" class="bi bi-trash3-fill"></i></td>' 
@@ -93,22 +71,32 @@
 			let goP = (pDto.prev == false)? 1 : (pDto.startNo - 1);
 			let goN = (pDto.endNo + 1) > pDto.realEndNo ? pDto.realEndNo : (pDto.endNo + 1);
 			
-			var pageBlock = `<nav> <ul class="pagination justify-content-center">`
-			  + ` <li class="page-item ${disabledP}" onclick="getReplyList(1)"><a class="page-link" > ◀◀ </a></li>`
+			var pageBlock = `<nav> <ul class="pagination justify-content-center">`;
+			  
+			//if(pDto.prev){
+				pageBlock +=
+				` <li class="page-item ${disabledP}" onclick="getReplyList(1)"><a class="page-link" > ◀◀ </a></li>`
 			  + ` <li class="page-item ${disabledP}" onclick="getReplyList(${goP})"><a class="page-link" > ◀ </a></li>`
-			  ;
+				  ;
+			//}
 
-			for (var i = pDto.startNo; i <= pDto.endNo; i++) {
+				console.log('pDto.startNo : ', pDto.startNo);
+				console.log('pDto.endNo : ', pDto.endNo);
+			for (let i = pDto.startNo; i <= pDto.endNo; i++) {
 				let active = (pDto.cri.pageNo == i)? 'active':"";
 			  pageBlock +=
 				  ` <li class="page-item ${active}" onclick="getReplyList(${i})"><a class="page-link">${i}</a></li>`
 				  ;
 			}
 
+			//if(pDto.next){
+				pageBlock +=
+					` <li class="page-item ${disabledN}" onclick="getReplyList(${goN})"><a class="page-link"> ▶ </a></li>`
+				+ ` <li class="page-item ${disabledN}" onclick="getReplyList(${pDto.realEndNo})"><a class="page-link"> ▶▶ </a></li>`
+				;
+			//}
 			pageBlock +=
-				` <li class="page-item ${disabledN}" onclick="getReplyList(${goN})"><a class="page-link"> ▶ </a></li>`
-			  +	` <li class="page-item ${disabledN}" onclick="getReplyList(${pDto.realEndNo})"><a class="page-link"> ▶▶ </a></li>`
-			  + `  </ul> </nav>`
+			   `  </ul> </nav>`
 			  ;
 
 			replyDiv.innerHTML += pageBlock;

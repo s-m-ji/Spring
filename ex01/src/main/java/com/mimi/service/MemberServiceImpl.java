@@ -13,8 +13,7 @@ public class MemberServiceImpl implements MemberService  {
 	MemberMapper mMapper;
 
 	@Override
-	public Member getMember() {
-		
-		return mMapper.getMember();
+	public Member login(Member member) {
+		return mMapper.login(member);
 	}
 }

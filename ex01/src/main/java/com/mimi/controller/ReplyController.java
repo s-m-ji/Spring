@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +45,8 @@ public class ReplyController extends CommonRestController{
 	 */
 	// ==================== 댓글 리스트 조회 ==================== 
 	@GetMapping("/reply/list/{bno}/{page}")
-	public Map<String, Object> getList(@PathVariable("bno") int bno, @PathVariable("page") int page){
+	public Map<String, Object> getList(@PathVariable("bno") int bno,
+										@PathVariable("page") int page){
 		
 		System.out.println("---------------------------------------------------------------------------------");
 		log.info("bno : " + bno);
@@ -53,9 +56,10 @@ public class ReplyController extends CommonRestController{
 		Criteria cri = new Criteria();
 		cri.setPageNo(page);
 		
+		List<ReplyVO> list = rService.getList(bno, cri);
+		
 		int total = rService.getTotalCnt(bno);
 		pageDto pDto = new pageDto(cri, total);
-		List<ReplyVO> list = rService.getList(bno, cri);
 		/*
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
@@ -106,8 +110,14 @@ public class ReplyController extends CommonRestController{
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		for (int rno : delList) {
+	        int res = rService.delete(rno);
+	        map.putAll(responseDeleteMap(res)); // putAll : 다른 Map 객체에 포함된 모든 키-값 쌍을 추가
+	    }
+		return map;
+		
+		/*
+		for (int rno : delList) {
 			int res = rService.delete(rno);
-			
 			
 			if(res>0) {
 				map.put("result", "success");
@@ -116,11 +126,8 @@ public class ReplyController extends CommonRestController{
 				map.put("result", "fail");
 				map.put("message", "댓글 삭제 중 예외 사항 발생");
 			}
-			
 		}
-		//return responseDeleteMap(res);
-		
-		return map;
+		*/
 	}
 	/*
 	 * @GetMapping("/reply/delete/{rno}") public Map<String, Object>
