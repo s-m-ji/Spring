@@ -239,6 +239,13 @@
 		    <version>1.5</version>
 		</dependency>
 		
+		<!-- 시큐리티 관련 추가 (MI, 2023/07/14) -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-core</artifactId>
+		    <version>5.0.7.RELEASE</version>
+		</dependency>
 		
 		
 				

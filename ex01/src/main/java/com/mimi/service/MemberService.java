@@ -26,4 +26,8 @@ public interface MemberService {
 	*/
 	
 	public Member login(Member member);
+	
+	public int register(Member meber);
+
+	public int idCheck(Member meber);
 }

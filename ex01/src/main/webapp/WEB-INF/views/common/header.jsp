@@ -163,18 +163,28 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <c:if test="${not empty userId}">
+	            <li class="nav-item"> <a class="nav-link"> 
+            		<font color="#fff"> 🖐 <span class="point">ID : ${userId} <%-- ${member.id} --%></span> 어서옵쇼 ‍🖐 </font> 
+	            		</a> </li>
+            </c:if>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
+            <c:if test="${empty userId}">
+              <a class="nav-link" href="../login">Login</a>
+              </c:if>
+            <c:if test="${not empty userId}">
+              <a class="nav-link" href="../logout">Logout</a>
+              </c:if>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../login?f=on">Register</a>
             </li>
             <li class="nav-item">
               <a class="nav-link disabled">Disabled</a>
             </li>
-            <c:if test="${not empty userId}">
-	            <li class="nav-item"> <a class="nav-link"> <font color="#fff"> 🖐 <span class="point">ID : ${userId} </span> 어서옵쇼 ‍🖐 </font> </a></li>
-            </c:if>
           </ul>
           <!-- <form class="d-flex" role="search">
           <select class="form-select" aria-label="Default select example">

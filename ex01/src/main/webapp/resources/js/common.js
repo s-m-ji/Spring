@@ -2,7 +2,7 @@
  *  공통으로 쓸 코드 모음
  */
 
-console.log("===== common.js 연결 완료!");
+console.log("-------------- common.js 연결 완료! ----------------");
 
 // Get방식 fetch : 요청(url)과 함수(callback)를 매개변수로 함
 	function fetchGet(url, callback){

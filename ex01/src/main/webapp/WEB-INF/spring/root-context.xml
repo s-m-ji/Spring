@@ -20,7 +20,7 @@
 		<property name="password" value="1234">	</property>
 	</bean>
 	
-	<!-- ref = 객체 (MI, 2023/06/30)-->
+	<!-- ref = "객체" (MI, 2023/06/30)-->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 	  <constructor-arg ref="hikariConfig"></constructor-arg>
 	</bean>
@@ -43,5 +43,8 @@
 	    <property name="maxInMemorySize" value="10485756"></property>
 	</bean>
 
+	<!-- 시큐리티를 사용하기 위함 (MI, 2023/07/14) -->
+	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	</bean>
 
 </beans>
