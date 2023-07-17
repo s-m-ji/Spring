@@ -28,9 +28,9 @@ public class MemberServiceTest {
 		log.info("-------------------------------------------------------------");
 		
 		Member m = new Member();
-		m.setId("test14");
+		m.setId("admin4");
 		m.setPass("1234");
-		m.setName("사용자14");
+		m.setName("관리자4");
 		
 		int res = mService.register(m);
 		System.out.println("암호화 된 비번 : " + m.getPass());

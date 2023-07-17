@@ -41,7 +41,7 @@ public class boardTest {
 		});
 	}
 	
-	
+	/*
 	@Test
 	public void getListXml() {
 		List<BoardVO> list = bMapper.getListXml();
@@ -52,7 +52,7 @@ public class boardTest {
 			log.info("********* getContent : " + board.getContent());
 		});
 	}
-	
+	*/
 	
 	@Test
 	public void insert() {
@@ -126,13 +126,20 @@ public class boardTest {
 		
 	}
 
-	
+	/*
 	@Test
 	public void getTotalCnt() {
 		int res = bMapper.getTotalCnt();
 		System.out.println("**********************************************************");
 		log.info("********* res : " + res);
 		assertEquals(res, 101);
+	}
+	*/
+	
+	@Test
+	public void updateReplyCnt() {
+		int res = bMapper.updateReplyCnt(2, 1);
+		assertEquals(1, res);
 	}
 	
 }

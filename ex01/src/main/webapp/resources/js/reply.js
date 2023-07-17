@@ -47,7 +47,7 @@ console.log("-------------- reply.js 연결 완료! ----------------");
 			  // 수정 시 화면에 날짜를 updatedate로 보여주기 
 			  rpDate = new Date(rp.replydate);
 			  upDate = new Date(rp.updatedate);
-			  date = (rpDate.toDateString() !== upDate.toDateString()) ? rp.updatedate : rp.replydate ;
+			  date = (rpDate.toDateString() !== upDate.toDateString()) ? rp.replydate : rp.updatedate ;
 			
 			  replyDivStr +=
 			      '<tr id="trReply'+ rp.rno +'" data-value="'+ rp.reply +'" data-rno="'+ rp.rno +'">' 

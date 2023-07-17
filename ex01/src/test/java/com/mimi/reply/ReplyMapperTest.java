@@ -49,9 +49,9 @@ public class ReplyMapperTest {
 	@Test
 	public void insertTest() {
 		ReplyVO vo = new ReplyVO();
-		vo.setBno(1);
-		vo.setReply("댓글");
-		vo.setReplyer("작성자");
+		vo.setBno(2);
+		vo.setReply("댓글2");
+		vo.setReplyer("작성자2");
 		
 		int res = rMapper.insert(vo);
 		System.out.println("---------------------------------------------------------------------------------");

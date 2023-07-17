@@ -93,5 +93,10 @@ public class BoardServiceImpl implements BoardService{
 		return bMapper.getTotalCnt(cri);
 	}
 
+	@Override
+	public int updateReplyCnt(int bno, int amount) {
+		return bMapper.updateReplyCnt(bno, amount);
+	}
+
 
 }

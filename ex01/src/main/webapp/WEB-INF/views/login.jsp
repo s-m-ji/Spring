@@ -189,7 +189,9 @@
 		// 실패 -> 메세지 처리
    		if (map.result == "success"){
    			// location.replace("/board/list");
-   			location.href="/board/list";
+   			// location.href="/board/list";
+   			location.href= map.url; // 관리자 권한 여부에 따라 이동되는 페이지를 나눔
+   			
    		} else {
    			getMessage.innerText = map.msg;
    		}

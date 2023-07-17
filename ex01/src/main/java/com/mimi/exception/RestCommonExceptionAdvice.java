@@ -27,15 +27,6 @@ public class RestCommonExceptionAdvice {
 		map.put("message", ex.getMessage());
 		return map;
 	}
-
-	
-	@ExceptionHandler(NoHandlerFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public String handle404(NoHandlerFoundException ex , Model model) {
-		
-		model.addAttribute("exception", ex);
-		return "/error/err404"; // jsp 페이지 연결
-	}
 	
 }
 

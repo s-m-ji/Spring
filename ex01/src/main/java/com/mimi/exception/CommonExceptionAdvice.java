@@ -9,12 +9,12 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import lombok.extern.log4j.Log4j;
 
-//@ControllerAdvice // 예외처리용 어노테이션 // ※※※ RestCommonExceptionAdvice 테스트 해보느라 잠시 어노테이션 주석 처리함
+// @ControllerAdvice // 예외처리용 어노테이션 // ※※※ RestCommonExceptionAdvice 테스트 해보느라 잠시 어노테이션 주석 처리함
 @Log4j // 로그 남김용 어노테이션
 public class CommonExceptionAdvice {
 
 	/*
-	 * root-context에 component-sacn을 패키지에 등록해야하므로 Bean으로 등록.
+	 * root-context에 component-scan을 패키지에 등록해야하므로 Bean으로 등록.
 	 *   
 	 *   ▶▶▶ @  ControllerAdvice
 	 *   컨트롤러에 대한 예외를 처리하는 객체임을 명시

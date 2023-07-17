@@ -1,6 +1,7 @@
 package com.mimi.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,6 +24,7 @@ public class Member {
 	private String pass;
 	private String name;
 	private int age;
+	private List<String> role; // 사용자 권한
 	
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private Date dueDate;

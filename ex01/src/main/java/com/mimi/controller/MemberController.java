@@ -56,7 +56,17 @@ public class MemberController extends CommonRestController {
 		if(member != null) {
 			session.setAttribute("member", member); // ${member.id}로 쓰면 getId()랑 동일한 결과 출력 가능
 			session.setAttribute("userId", member.getId()); 
-			return responseMap(REST_SUCCESS, "로그인 성공 축하축하 ~");
+			Map<String, Object> map = responseMap(REST_SUCCESS, "로그인 성공 축하축하 ~");
+			if(member.getRole() != null && member.getRole().contains("admin_role")){
+				// 관리자 로그인 -> 관리자 페이지로 이동
+				System.out.println("********** TEST member.getRole() if : " + member.getRole());
+				map.put("url", "/admin");
+			} else {
+				// 사용자 로그인 -> 사용자 페이지로 이동
+				System.out.println("********** TEST member.getRole() else : " + member.getRole());
+				map.put("url", "/board/list");
+			}
+			return map;
 		} else {
 			return responseMap(REST_FAIL, " 아이디, 비밀번호를 확인해줘잉 \n ※ 암호화 되지 않은 비번은 이제 쓸 수 없다!");
 		}

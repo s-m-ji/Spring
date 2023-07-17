@@ -80,6 +80,11 @@
 		<include refid="criteria"></include>
 	</select>
 	
+	<update id="updateReplyCnt">
+		UPDATE tbl_board SET replycnt = replycnt + #{amount} WHERE bno = #{bno}
+	</update>
+	<!-- amount로 쓰는 이유는 댓글이 추가 +1 되기도, 삭제 -1 되기도 하기 때문 !  -->
+	
 	<!-- 반복되는 쿼리를 미리 작성해놓고 재활용하기
 		반복할 쿼리 선언 : <sql id="">
 		선언한 쿼리 사용 : <include refId="">

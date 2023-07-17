@@ -1,5 +1,6 @@
 package com.mimi.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -21,4 +22,6 @@ public interface BoardService {
 	public int delete(int bno);
 	
 	public int getTotalCnt(Criteria cri);
+	
+	public int updateReplyCnt(@Param("bno") int bno, @Param("amount") int amount);
 }

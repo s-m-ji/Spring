@@ -3,6 +3,8 @@ package com.mimi.member;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +61,14 @@ public class MemberMapperTest {
 		int res = mMapper.idCheck(m);
 		
 		assertEquals(1, res);
+	}
+	
+	@Test
+	public void test4(){
+		log.info("-------------------------------------------------------------");
+		List<String> list = mMapper.getMemberRole("admin");
+		
+		System.out.println("****************** list : " + list);
+		System.out.println("****************** 관리자 권한 : " + list.contains("admin_role"));
 	}
 }

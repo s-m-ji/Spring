@@ -16,7 +16,8 @@
 </select>
 
 <insert id="insert">
-	INSERT INTO tbl_reply VALUES (SEQ_REPLY.NEXTVAL, #{bno}, #{reply}, #{replyer}, SYSDATE, SYSDATE)
+	insert into tbl_reply (rno, bno, reply, replyer, replydate)
+    	values (seq_reply.nextval, #{bno}, #{reply}, #{replyer}, sysdate)
 </insert>
 
 <delete id="delete">
@@ -30,5 +31,9 @@
 <update id="update">
 	UPDATE tbl_reply SET reply = #{reply}, updateDate = sysdate WHERE rno = #{rno}
 </update>
+
+<select id="getOne" resultType="com.mimi.vo.ReplyVO">
+	SELECT * FROM tbl_reply WHERE rno = #{rno}
+</select>
 
 </mapper>

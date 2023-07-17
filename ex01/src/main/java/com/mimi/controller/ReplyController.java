@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mimi.service.BoardService;
 import com.mimi.service.ReplyService;
 import com.mimi.vo.Criteria;
 import com.mimi.vo.ReplyVO;
@@ -105,7 +106,7 @@ public class ReplyController extends CommonRestController{
 	
 	// ==================== 댓글 삭제 처리 ==================== 
 	@GetMapping("/reply/delete/{rno}")
-	public Map<String, Object> delete(@PathVariable("rno") List<Integer> delList){ // 여러개 삭제하려고 List 형태로 변경
+	public Map<String, Object> delete(@PathVariable("rno") List<Integer> delList){ // 한번에 여러개 삭제하려고 List 형태로 변경
 		System.out.println("---------------------------------------------------------------------------------");
 		Map<String, Object> map = new HashMap<String, Object>();
 		

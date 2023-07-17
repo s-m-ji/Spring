@@ -2,6 +2,7 @@ package com.mimi.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import com.mimi.vo.BoardVO;
@@ -26,6 +27,7 @@ public interface BoardMapper {
 	public int delete(int bno);
 	
 	public int getTotalCnt(Criteria cri);
-	
+
+	public int updateReplyCnt(@Param("bno") int bno, @Param("amount") int amount);
 	
 }

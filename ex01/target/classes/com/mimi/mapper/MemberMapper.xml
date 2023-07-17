@@ -14,4 +14,8 @@
 	<select id="idCheck" resultType="int">
 		SELECT COUNT(*) FROM member WHERE id = #{id}
 	</select>
+	
+	<select id="getMemberRole" resultType="String">
+		SELECT role_id FROM memberrole WHERE id=#{id}
+	</select>
 </mapper>
