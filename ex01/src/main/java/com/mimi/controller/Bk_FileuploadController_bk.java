@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-public class FileuploadController {
+public class Bk_FileuploadController_bk {
 	/*
 	 * 메소드의 리턴 타입
 	 * 
@@ -21,11 +21,13 @@ public class FileuploadController {
 	 *  요청 주소와 동일한 이름의 jsp를 반환
 	 */
 	
+	/*
 	// @GetMapping("/fileupload")
 	@GetMapping("/file/fileupload")
 	private void fileupload() {
 		
 	}
+	*/
 
 	/**
 	 * 파일 업로드용 라이브러리 추가
@@ -37,6 +39,8 @@ public class FileuploadController {
 	 *  2) multipartResolver 빈 등록
 	 *  3) 메소드의 매개변수로 MultipartFile 이용
 	 */
+	
+	/*
 	@PostMapping("/file/fileupload")
 	public void fileuploadAction(ArrayList<MultipartFile> files) {
 		files.forEach(file -> {
@@ -45,7 +49,7 @@ public class FileuploadController {
 			System.out.println("--------- size : " + file.getSize());
 		});
 	}
-	
+	*/
 }
 
 

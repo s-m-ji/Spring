@@ -87,14 +87,15 @@ public class LogAdvice {
 	
 	/*
 	@Around("execution(* com.mimi.service.Board*.*(..))")
-	public Object logTime(ProceedingJoinPoint pjp) { // 실행 결과를 반환하기 위해 매개변수를 받음
+	public Object logTime(ProceedingJoinPoint pjp) { // 타겟 메소드 실행 결과를 반환하기 위해 매개변수를 받음
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		
 		Object res = "";
 		try {
-			res = pjp.proceed(); // 주 업무로직 실행 (타켓 메소드의 실행 시점을 내가 지정할 수 있음)
+			res = pjp.proceed(); // 메소드 실행 결과를 꼭 res에 담아두어야함 
+			// 주 업무로직 실행 (타켓 메소드의 실행 시점을 내가 지정할 수 있음)
 		} catch (Throwable e) {
 			e.getStackTrace();
 			e.getMessage();
@@ -121,7 +122,8 @@ public class LogAdvice {
 	 */
 	
 	// 로그 남기는 객체를 자동 주입 받기  
-	@AfterThrowing(pointcut="execution(* com.mimi.service.*.*(..))" // service 하위의 모든 메소드를 대상으로 함
+	@AfterThrowing(pointcut="execution(* com.mimi.service.*.*(..))" 
+									// service 하위의 모든 메소드를 대상으로 함
 					, throwing = "exception") 
 	public void logException(JoinPoint joinPoint, Exception exception) {
 		// 예외 발생 그 내용을 테이블에 저장함.
@@ -129,11 +131,13 @@ public class LogAdvice {
 			LogVo vo = new LogVo();
 			vo.setClassname(joinPoint.getTarget().getClass().getName());
 			vo.setMethodname(joinPoint.getSignature().getName());
-			vo.setParams(Arrays.toString(joinPoint.getArgs())); // 파라미터는 배열로 들어오기 때문에 스트링화 하였음
+			vo.setParams(Arrays.toString(joinPoint.getArgs())); 
+						// 파라미터는 배열로 들어오기 때문에 스트링화 하였음
 			vo.setErrmsg(exception.getMessage());
 			
 			lService.insert(vo);
-			log.info(">>>>>>>>>>>>>>>>>>>>>>>>> 로그 테이블에 저장됨 ");
+			log.info(">>>>>>>>>>>>>>>>>>>>>>>>> 로그 테이블에 저장됨 "); 
+					// 트랜잭션 처리가 된 부분은 오류 발생 시 원복되기때문에 로그 테이블에 남지 않음 
 			
 		} catch (Exception e) {
 			log.info(">>>>>>>>>>>>>>>>>>>>>>>>> 로그 테이블 저장 중 예외 발생");

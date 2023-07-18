@@ -14,5 +14,6 @@ public class BoardVO {
 	private String rent_no;
 	private String rent_date;
 	private String return_exp_date;
+	private int replycnt; // 댓글 수 
 	
 }

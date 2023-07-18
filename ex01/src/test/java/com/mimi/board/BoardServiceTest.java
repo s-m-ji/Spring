@@ -21,6 +21,7 @@ public class BoardServiceTest {
 	@Autowired
 	BoardService bService;
 
+	/*
 	@Test
 	public void getListXml() {
 		List<BoardVO> list = bService.getListXml();
@@ -30,4 +31,5 @@ public class BoardServiceTest {
 			log.info(board);
 		});
 	}
+	*/
 }

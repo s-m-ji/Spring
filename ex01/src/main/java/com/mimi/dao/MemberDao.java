@@ -17,7 +17,7 @@ public class MemberDao {
 		
 		String sql = 
 				String.format("select * from member where id='%s' and pass='%s'"
-						, paramMember.getId(), paramMember.getPw());
+						, paramMember.getId(), paramMember.getPass());
 		
 		try (Connection conn = com.mimi.dao.ConnectionUtil.getConnection();
 				Statement stmt = conn.createStatement();
@@ -32,13 +32,13 @@ public class MemberDao {
 			}
 			
 			System.out.println(" ---------- MemberDao 로그인 성공 ");
-			System.out.println(" ---------- getPw() " + paramMember.getPw());
+			System.out.println(" ---------- getPass() " + paramMember.getPass());
 			System.out.println(" ---------- getId() " + paramMember.getId());
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(" ---------- MemberDao 로그인 실패 ");
-			System.out.println(" ---------- getPw() " + paramMember.getPw());
+			System.out.println(" ---------- getPass() " + paramMember.getPass());
 			System.out.println(" ---------- getId() " + paramMember.getId());
 		}
 		

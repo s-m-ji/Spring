@@ -127,6 +127,7 @@
 	
 	<!-- 댓글 목록 -->
 	<div class="btn-group" role="group" aria-label="Basic mixed styles example">
+		<p>총 댓글 수 :  ${book.replycnt} </p>
 	  <label class="btn btn-danger" for="adminChkBox">✅  전체 선택</label>
 	   <input type="checkbox" id="adminChkBox" value="" style="display:none;">
 	  <button type="button" class="btn btn-warning" onclick="deleteReply();">❌ 일괄 삭제</button>

@@ -20,7 +20,8 @@ public class RestCommonExceptionAdvice {
 	public Map<String, Object> except(Exception ex) {
 		
 		System.out.println("----------------------------------------------------------------------" );
-		log.info("---------- Exception ....." + ex.getMessage());
+		log.info("---------- Exception " + ex.getMessage());
+		ex.printStackTrace();
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("result", "fail");

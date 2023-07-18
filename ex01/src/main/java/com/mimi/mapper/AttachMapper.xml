@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mimi.mapper.AttachMapper">
+
+<select id="getList" resultType="com.mimi.vo.AttachVO">
+	SELECT T.* 
+    , uploadpath||uuid||'_'||filename savepath
+     , DECODE(filetype , 'I', uploadpath||'thum_'||uuid||'_'||filename, 'file') t_savepath
+ 			FROM tbl_attach T WHERE bno = #{bno}
+</select>
+
+<insert id="insert">
+	INSERT INTO tbl_attach VALUES 
+		(#{uuid}, #{uploadPath}, #{fileName}, #{filetype}, #{bno})
+</insert>
+
+</mapper>

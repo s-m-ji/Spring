@@ -30,11 +30,11 @@ public class CommonExceptionAdvice {
 	// 근데 여기서는 500에러밖에 처리를 못한다구..
 	public String except(Exception ex, Model model) {
 		
-		log.info("---------- Exception .....");
 		log.debug("---------- 로그 테스트 debug");
 		log.error("---------- 로그 테스트 error");
-		
-		System.out.println("---------- Exception : " + ex.getMessage());
+		System.out.println("----------------------------------------------------------------------" );
+		System.out.println("---------- Exception " + ex.getMessage());
+		ex.printStackTrace();
 		model.addAttribute("exception", ex);
 		
 		return "/error/err500"; // jsp 페이지 연결

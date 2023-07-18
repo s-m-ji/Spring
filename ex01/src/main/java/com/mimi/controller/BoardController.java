@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mimi.service.AttachService;
 import com.mimi.service.BoardService;
+import com.mimi.vo.AttachVO;
 import com.mimi.vo.BoardVO;
 import com.mimi.vo.Criteria;
 
@@ -25,6 +27,9 @@ public class BoardController {
 	
 	@Autowired
 	BoardService bService;
+	
+	//@Autowired
+	//AttachService aService;
 	
 	@GetMapping("/reply/test")
 	public String test() {
@@ -89,6 +94,10 @@ public class BoardController {
 		BoardVO board = bService.getOne(paramVO.getBno());
 		log.info("view.여기를보세요.여기를보세요.여기를보세요.여기를보세요.여기를보세요." + board);
 		model.addAttribute("book", board);
+		
+		// 해당 게시글에 업로드 된 파일을 조회
+		//List<AttachVO> fileList = aService.getList(board.getBno());
+		//model.addAttribute("fileList", fileList);
 		
 	}
 	
