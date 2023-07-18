@@ -139,7 +139,7 @@
 	  <input type="button" aria-label="Last name" id="btnReplyWrite" class="input-group-text" value="완료">
 	</div>
 	<br>
-	<div id="replyDiv"></div>
+	<div id="replyDiv" class="${name}"></div>
 	<br><br><br>
 	</main>
 </body>

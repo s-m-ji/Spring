@@ -22,7 +22,10 @@ console.log("-------------- reply.js 연결 완료! ----------------");
 	  let list = map.list;
 	  let pDto = map.pDto;
 	  console.log('list', list);
-	 
+	  
+	  //let login = replyDiv.classList.contains('on');
+	  let userId = replyDiv.className;
+	  
 	  // list가 비어있을 경우에 대한 처리 ! 
 	  if(list.length == 0) {
 		  replyDiv.innerHTML = "<h4>🙋‍♀️ 댓글이 아직 up9yo 🙋‍♀️</h4>";
@@ -52,10 +55,13 @@ console.log("-------------- reply.js 연결 완료! ----------------");
 			  replyDivStr +=
 			      '<tr id="trReply'+ rp.rno +'" data-value="'+ rp.reply +'" data-rno="'+ rp.rno +'">' 
 			      +'  <td>'+ rp.seq +' &nbsp; <input type="checkbox" class="chkBox" name="bno" value="'+ rp.rno +'"></td>' 
-			      +'  <td class="text-start"><b>'+ rp.reply +'</b>'
-			      +'	<i id="btnEdit" class="bi bi-pencil-fill" onclick="rpEdit('+ rp.rno +');"></i>'
-			      +'	<i id="btnDel" onclick="rpDelete('+ rp.rno +');" class="bi bi-trash3-fill"></i></td>' 
-			      +'  <td><font color="#555"> <i class="bi bi-person-circle"></i> &nbsp;' + rp.replyer + ' </font><br> <font color="#999">'+ date +'</font></td>' 
+			      +'  <td class="text-start"><b>'+ rp.reply +'</b>';
+		      if(userId == rp.replyer){
+		    	  replyDivStr += '	<i id="btnEdit" class="bi bi-pencil-fill" onclick="rpEdit('+ rp.rno +');"></i>'
+		    	  				+'	<i id="btnDel" onclick="rpDelete('+ rp.rno +');" class="bi bi-trash3-fill"></i></td>'; 
+			    	  
+			      }
+			  replyDivStr += '  <td><font color="#555"> <i class="bi bi-person-circle"></i> &nbsp;' + rp.replyer + ' </font><br> <font color="#999">'+ date +'</font></td>' 
 			      +'</tr>';
 		  });
 

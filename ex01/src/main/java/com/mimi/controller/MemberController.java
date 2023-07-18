@@ -56,6 +56,7 @@ public class MemberController extends CommonRestController {
 		if(member != null) {
 			session.setAttribute("member", member); // ${member.id}로 쓰면 getId()랑 동일한 결과 출력 가능
 			session.setAttribute("userId", member.getId()); 
+			session.setAttribute("name", member.getName()); 
 			Map<String, Object> map = responseMap(REST_SUCCESS, "로그인 성공 축하축하 ~");
 			if(member.getRole() != null && member.getRole().contains("admin_role")){
 				// 관리자 로그인 -> 관리자 페이지로 이동
