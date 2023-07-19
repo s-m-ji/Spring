@@ -1,4 +1,4 @@
-package com.mimi.service;
+package com.mimi.controller;
 
 import java.text.DateFormat;
 import java.util.Date;

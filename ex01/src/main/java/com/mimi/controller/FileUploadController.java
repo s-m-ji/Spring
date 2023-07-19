@@ -27,7 +27,7 @@ import net.coobird.thumbnailator.Thumbnails;
 
 @Log4j
 @Controller
-public class FileUploadController {
+public class FileUploadController extends CommonRestController {
 	
 	@Autowired
 	AttachService aService;
@@ -48,87 +48,30 @@ public class FileUploadController {
 	 * 	- 라이브러리 추가 (commons-fileupload)
 	 * 	- bean 객체 생성 (multipartResolver)
 	 */
-	@PostMapping("/file/fileUploadAction")
+	// 파일 업로드
+	@PostMapping("/file/fileUploadAction") 
 	public String fileAction(List<MultipartFile> files, int bno, RedirectAttributes rttr) {
 		
-		int insertRes = 0; // 업로드  중 몇 건이 처리되었는지 파악하기위한용도 
-		// files.forEach(file -> { 람다 표현식이어서 continue와 외부 변수를 쓸 수 없기에 일반 for문으로 바꿈...
-			for(MultipartFile file : files) {
+		int insertRes = fileupload(files, bno); // 업로드  중 몇 건이 처리되었는지 파악하기위한 용도 
 				
-				if(file.isEmpty()) { 
-					// 현재 폼에 input[type="file"]이 3개가 있기 때문에 
-					// 파일이 업로드되지 않고 submit 된 태그가 있을 경우에는 알아서 패스하도록 처리함
-					continue;
-				}
-					
-				System.out.println("----------------------------------------------------------");
-				log.info("OriginalFilename : " + file.getOriginalFilename());
-				log.info("Name : " + file.getName());  // input 타입의 name을 말함
-				log.info("Size : " + file.getSize());
-				
-				try {
-					/**
-					 *  UUID
-					 *  	소프트웨어 구축에 쓰이는 식별자 표준 (고유한 문자열이 생성되어 최대한 중복되지 않는 값을 붙여준다.)
-					 *  	파일명이 중복되어 파일이 소실되지 않도록 uuid를 붙여서 저장함 
-					 */
-					UUID uuid = UUID.randomUUID();
-					String saveFileName = uuid + "_" + file.getOriginalFilename();
-
-					String uploadPath = getFolder();
-					// getFolder()는 아래에 생성해준 메소드임 : 파일 업로드 경로를 반환해줌
-					//						c:/upload    /2023/7/18/ 		파일명
-					File sfile = new File(ATTACHES_DIR + uploadPath + saveFileName);
-					
-					file.transferTo(sfile); // file : 원본 파일 , sfile : 저장 대상 파일
-					System.out.println("sfile : " + sfile);
-				
-					// 업로드된 파일 정보를 테이블에 저장
-					AttachVO att = new AttachVO();
-					att.setBno(bno);
-					att.setFileName(file.getOriginalFilename());
-					att.setFiletype("I"); 
-					att.setUploadPath(uploadPath);
-					att.setUuid(uuid.toString());
-					
-					//try {
-						// 주어진 파일의 Mime 타입을 먼저 확인
-						String contentType = Files.probeContentType(sfile.toPath());
-						// Mime 타입이 이미지라면 썸네일을 자동으로 생성해주기
-						if(contentType != null && contentType.startsWith("image")) {
-							att.setFiletype("I");
-							String thumnailPath = ATTACHES_DIR + uploadPath + "thum_" + saveFileName;
-							//            원본파일,  크기,           저장될 경로
-							Thumbnails.of(sfile).size(100, 100).toFile(thumnailPath);
-							} else {
-								att.setFiletype("F"); // 해당 파일은 이미지 타입이 아님
-							}
-						//} catch (Exception e) {
-					//}
-					
-					System.out.println("att : " + att);
-					
-					int res = aService.insert(att);
-					
-					if(res > 0) {
-						insertRes++;
-						System.out.println("파일 업로드 성공");
-					}
-					
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} 
-				
-			}
-		// });
-			
 		String msg = "업로드 " + insertRes + " 건 저장되었습니다.";
 		rttr.addAttribute("msg", msg);
 		//return "redirect:/file/fileupload?msg=" + msg; // /file ~ 이렇게 루트 경로를 잡아야 합네당
 		return "redirect:/file/fileupload"; // 한글 깨짐 방지 처리를 위해서  RedirectAttributes 사용
+		// 결과 :  jps 파일을 반환
 	}
+	
+	
+	// 파일 업로드 - fetch
+	@PostMapping("/file/fileUploadActionFetch") 
+	public @ResponseBody Map<String, Object> fileActionFetch(List<MultipartFile> files, int bno) {
+		log.info("------------------- fileUploadActionFetch -------------------");
+		int insertRes = fileupload(files, bno); 
+		log.info("insertRes : " + insertRes);
+		return responseMap("success", "업로드 " + insertRes + " 건 저장되었습니다.!!!!!");
+		// 결과 :  Map 객체를 반환
+	}	
+
 	
 	// 파일 목록 조회
 	@GetMapping("/file/list/{bno}") // rest 방식으로 호출 할 예정
@@ -137,6 +80,7 @@ public class FileUploadController {
 		map.put("list", aService.getList(bno));
 		return map;
 	}
+	
 	
 	// 파일 업로드 경로 생성 (중복 방지용 : 업로드 날짜 폴더를 이름으로 사용함)
 	public String getFolder() {
@@ -151,7 +95,6 @@ public class FileUploadController {
 		
 		// 날짜에 해당하는 폴더가 없으면 생성할 수 있도록 처리
 		File saveDir = new File(ATTACHES_DIR + uploadPath);
-		
 		if(!saveDir.exists()) { // 폴더가없으면 ?
 			if(saveDir.mkdirs()) { // 폴더를 만들어줘 !
 				// mkdir() 이건 디렉토리를 하나만 만들어줌
@@ -163,6 +106,7 @@ public class FileUploadController {
 		return uploadPath;
 	}
 	
+	
 	// 간단히 테스트 해보기 위해서 메인메소드를 활용
 	public static void main(String[] args) {
 		LocalDate currentDate = LocalDate.now();
@@ -171,6 +115,88 @@ public class FileUploadController {
 		log.info("currentDate : " + currentDate);
 		log.info("uploadPath : " + uploadPath);
 	}
+	
+	
+	/**
+	 * 첨부파일 저장 및 DB 등록 처리
+	 * @param files
+	 * @param bno
+	 * @return
+	 */
+	public int fileupload(List<MultipartFile> files, int bno) {
+		int insertRes = 0;
+		for(MultipartFile file : files) {
+			
+			if(file.isEmpty()) { 
+				// 현재 폼에 input[type="file"]이 3개가 있기 때문에 
+				// 파일이 업로드되지 않고 submit 된 태그가 있을 경우에는 알아서 패스하도록 처리함
+				continue;
+			}
+				
+			System.out.println("----------------------------------------------------------");
+			log.info("OriginalFilename : " + file.getOriginalFilename());
+			log.info("Name : " + file.getName());  // input 타입의 name을 말함
+			log.info("Size : " + file.getSize());
+			
+			try {
+				/**
+				 *  UUID
+				 *  	소프트웨어 구축에 쓰이는 식별자 표준 (고유한 문자열이 생성되어 최대한 중복되지 않는 값을 붙여준다.)
+				 *  	파일명이 중복되어 파일이 소실되지 않도록 uuid를 붙여서 저장함 
+				 */
+				UUID uuid = UUID.randomUUID();
+				String saveFileName = uuid + "_" + file.getOriginalFilename();
+
+				String uploadPath = getFolder();
+				// getFolder()는 별도 생성한 메소드임 : 파일 업로드 경로를 반환해줌
+				//						c:/upload    /2023/7/18/ 		파일명
+				File sfile = new File(ATTACHES_DIR + uploadPath + saveFileName);
+				
+				file.transferTo(sfile); // file : 원본 파일 , sfile : 저장 대상 파일
+				System.out.println("sfile : " + sfile);
+			
+				// 업로드된 파일 정보를 테이블에 저장
+				AttachVO att = new AttachVO();
+				att.setBno(bno);
+				att.setFileName(file.getOriginalFilename());
+				//att.setFiletype("I"); // 아래의 if문에서 셋팅해줄겨
+				att.setUploadPath(uploadPath);
+				att.setUuid(uuid.toString());
+				
+				//try {
+					// 주어진 파일의 Mime 타입을 먼저 확인
+					String contentType = Files.probeContentType(sfile.toPath());
+					// Mime 타입이 이미지라면 썸네일을 자동으로 생성해주기
+					if(contentType != null && contentType.startsWith("image")) {
+						att.setFiletype("I");
+						String thumnailPath = ATTACHES_DIR + uploadPath + "thum_" + saveFileName;
+						//            원본파일,  크기,           저장될 경로
+						Thumbnails.of(sfile).size(100, 100).toFile(thumnailPath);
+						} else {
+							att.setFiletype("F"); // 해당 파일은 이미지 타입이 아님
+						}
+					//} catch (Exception e) {
+				//}
+				
+				System.out.println("att : " + att);
+				
+				int res = aService.insert(att);
+				
+				if(res > 0) {
+					insertRes++;
+					System.out.println("파일 업로드 성공");
+				}
+				
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+			
+		}
+		return insertRes;
+	}
+	
 	
 }
 

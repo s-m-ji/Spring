@@ -239,6 +239,13 @@
 	     <artifactId>thumbnailator</artifactId>
 	     <version>0.4.8</version>
 	   </dependency>
+	   
+	   <!-- JSON 파싱을 위해 추가 (MI, 2023/07/18) -->
+	   <dependency>
+		  <groupId>org.json</groupId>
+		  <artifactId>json</artifactId>
+		  <version>20200518</version>
+		</dependency>
 		       
 	</dependencies>
     <build>
