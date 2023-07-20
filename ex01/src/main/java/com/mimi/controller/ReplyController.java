@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mimi.service.BoardService;
@@ -29,6 +30,7 @@ import lombok.extern.log4j.Log4j;
  */
 
 @RestController // rest 방식을 지원하는 컨트롤러라고 명시 *@Controller는 기본 jsp 파일을 반환하도록 설정되어있다.
+// 레스트 컨트롤러면 @ResponseBody 명시하지 않아도 된다 ? TODO
 @Log4j
 public class ReplyController extends CommonRestController{
 	

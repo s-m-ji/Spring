@@ -37,7 +37,7 @@ import com.mimi.vo.pageDto;
 
 
 @Service
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardMapper bMapper;

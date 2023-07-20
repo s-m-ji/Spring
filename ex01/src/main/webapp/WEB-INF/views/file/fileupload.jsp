@@ -168,8 +168,7 @@
 						+ "<i class='bi bi-pencil-square' id='editFile'></i>"
 						+ "<i class='bi bi-x-square' id='deleteFile' onclick='attachFileDelete(this)' data-bno='"+ item.bno +"' data-uuid='"+ item.uuid +"'></i>"
 						
-						+ "<br><a href='/file/download/"+ savePath +"' class='point'>"+ item.fileName +"</a><br>";
-/* 						+ "<br><a href='/file/download?fileName="+ savePath +"' class='point'>"+ item.fileName +"</a><br>"; */
++ "<br><a href='/file/download?fileName="+ savePath +"' class='point'>"+ item.fileName +"</a><br>";
 						// 다운로드 이름은 String 문자열 처리해서 적용해보라고 하셨..! substring "_" 
 				//});
 			}

@@ -138,7 +138,8 @@
     <!-- Custom js (MI, 2023/07/06) -->
     <script src='/resources/js/custom.js'></script>
     <script src='/resources/js/common.js'></script>
-    <script src='/resources/js/reply.js'></script>
+    <!-- <script src='/resources/js/reply.js'></script> -->
+    <!-- <script src='/resources/js/file.js'></script> -->
     
     <!-- fontawesome 폰트 -->
     <script src="https://kit.fontawesome.com/bc0f5040fb.js" crossorigin="anonymous"></script>

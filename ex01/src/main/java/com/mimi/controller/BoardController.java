@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mimi.service.AttachService;
@@ -23,10 +24,13 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/board/*")
 @Log4j
-public class BoardController {
+public class BoardController extends FileUploadController {
 	
 	@Autowired
 	BoardService bService;
+	
+	@Autowired
+	AttachService aSerivce;
 	
 	//@Autowired
 	//AttachService aService;
@@ -119,12 +123,17 @@ public class BoardController {
 	 * addFlashAttribute : 세션에 저장 후 페이지를 전환
 	 */
 	@PostMapping("write")
-	public String writePost(RedirectAttributes rdAttr, BoardVO board) {
+	public String writePost(RedirectAttributes rdAttr, BoardVO board, List<MultipartFile> files) {
 		log.info(board);
 		String msg = "";
 		//if(board.getBno()>0) {
 			// int res = bService.insert(board);
 			int res = bService.insertSelectKey(board); 
+			
+			// 등록 시 해당 글에 첨부 파일도 같이 등록
+			fileupload(files, board.getBno());
+			
+			
 			// -> 이렇게하면 board.getBno() 값을 바로 활용할 수 있음
 			// 시퀀스 번호를 조회해서 bno에 먼저 저장해두었기때문에 ! 
 			// * 아래 테스트 시 else 항목도 제대로 나오는지 보려면 
@@ -133,7 +142,7 @@ public class BoardController {
 			if(res>0) {
 				System.out.println("******************** write 성공");
 				msg = board.getBno() + "번 글 write 성공";
-				rdAttr.addFlashAttribute("passMsgPost" , msg); 
+				rdAttr.addFlashAttribute("passMsg" , msg); 
 				rdAttr.addFlashAttribute("book" , board); 
 				// -> addFlash~는 값이 session에 담겨져서 넘어갔다가 새로고침하면 삭제됨
 				log.info(msg);
@@ -170,7 +179,8 @@ public class BoardController {
 	 * ▶ ▶ ▶ 게시글 수정 완료 후 폼 처리
 	 */
 	@PostMapping("edit")
-	public String editPost(RedirectAttributes rdAttr, BoardVO board, Criteria cri) {
+	public String editPost(RedirectAttributes rdAttr, List<MultipartFile> files,
+								BoardVO board, Criteria cri) {
 		// pageNo를 쓰기 위해 매개변수에 Criteria 사용하여 파라미터를 자동 수집함
 		
 		// ?pageNo=1
@@ -180,6 +190,10 @@ public class BoardController {
 		// request.getAttribute("pageNo");
 		// ${pageNo}
 		int res = bService.update(board); 
+		
+		// 수정 시 파일도 함께 수정하여 올릴 수 있도록
+		fileupload(files, board.getBno());
+		
 		String msg = "";
 		if(res>0) {
 			System.out.println("******************** edit 성공");
@@ -190,11 +204,14 @@ public class BoardController {
 			 // rdAttr.addFlashAttribute("book" , board);
 			 
 			 // 파라미터로 넘겨주는 것
-			 rdAttr.addAttribute("passMsgPost" , msg); 
-			 rdAttr.addAttribute("book" , board);
+			/* rdAttr.addAttribute("book" , board); */
+			 
+			 rdAttr.addAttribute("bno" , board.getBno());
 			 rdAttr.addAttribute("pageNo" , cri.getPageNo());
 			 rdAttr.addAttribute("sField" , cri.getSField());
 			 rdAttr.addAttribute("sWord" , cri.getSWord());
+			 
+			 rdAttr.addAttribute("passMsgPost" , msg); 
 			 log.info(board);
 			 System.out.println("res : " + res);
 		} else {

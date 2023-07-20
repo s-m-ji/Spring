@@ -71,7 +71,7 @@
 	</update>
 	
 	<delete id="delete">
-		DELETE tbl_board WHERE bno = #{bno}
+		DELETE tbl_board WHERE bno = #{bno} CASCADE
 	</delete>
 	
 	<select id="getTotalCnt" resultType="int">

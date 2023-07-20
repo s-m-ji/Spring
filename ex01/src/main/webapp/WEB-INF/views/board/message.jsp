@@ -10,7 +10,7 @@
 <script>
   let passMsg = "${passMsg}";
   let failMsg = "${failMsg}";
-  let passMsgPost = "${passMsgPost}";
+  let passMsgPost = "${param.passMsgPost}"; // param. 이라고 명시하지않으면 내장객체(4가지 스코프 영역)에 저장된 값에서 찾아오는 것이므로 유의 !
   
   // window.onload = function() {
 	  window.addEventListener('load', function(){
@@ -20,7 +20,7 @@
 	    });
 	
 	    const message = passMsg || failMsg || passMsgPost;
-	    const redirectUrl = passMsg ? "/board/list" : `/board/view?bno=${book.bno}&pageNo=${param.pageNo}`;
+	    const redirectUrl = passMsg ? "/board/list" : `/board/view?bno=${param.bno}&pageNo=${param.pageNo}`;
 	
 	    if (message) {
 	      document.querySelector(".modal-body").innerHTML = message;

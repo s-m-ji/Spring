@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 <script src='/resources/js/reply.js'></script>
+<script src='/resources/js/file.js'></script>
 <script type="text/javascript">
 	// window.onload = function(){  // 댓글 파일인 test.jsp 안에 적어둔 window.onload와 중복되면서 기능이 실행되지않음
 		
@@ -97,21 +98,24 @@
 				  <span class="input-group-text" id="basic-addon1">제목</span>
 				  <input type="text" name="title" value="${book.title}" class="form-control" readonly="readonly" aria-label="title" aria-describedby="basic-addon1">
 			  </div>
-			  <div class="input-group">
+			  <div class="input-group mb-3">
 				  <span class="input-group-text">내용</span>
 				  <textarea class="form-control" name="content" rows="10" style="resize: none;" aria-label="With textarea" readonly="readonly">${book.content}</textarea>
 			  </div>
 			</div>
-			<div class="col row g-3  justify-content-center ">
 			  <div class="input-group mb-3">
 				  <span class="input-group-text" id="basic-addon1">작가</span>
 				  <input type="text" name="writer" value="${book.writer}" class="form-control" readonly="readonly" aria-label="writer" aria-describedby="basic-addon1">
 			  </div>
-			<div class="col-auto ">
+			<%-- <div class="col-auto ">
 				<img alt="${ book.title } 이미지" width="200px" src="/resources/images/파일명.png">
+			</div> --%>
+			<div class="input-group mb-3 ">
+				<span class="input-group-text" id="basic-addon1">파일</span>
+				<!-- <button type="button" id="btnList">조회</button> -->
+				<div id="fileDiv" class="form-control">!!!!! 파일  !!!!!</div>
 			</div>
-			</div>
-			</div>
+		   </div>
 		  <br>
 		</form>
 		  <%-- <button type="button" class="btn btn-dark" onclick="requestAction('./edit', ${book.bno});">글 수정하기</button> --%>
@@ -127,11 +131,11 @@
 	
 	<!-- 댓글 목록 -->
 	<div class="btn-group" role="group" aria-label="Basic mixed styles example">
-		<p>총 댓글 수 :  ${book.replycnt} </p>
 	  <label class="btn btn-danger" for="adminChkBox">✅  전체 선택</label>
 	   <input type="checkbox" id="adminChkBox" value="" style="display:none;">
 	  <button type="button" class="btn btn-warning" onclick="deleteReply();">❌ 일괄 삭제</button>
 	</div>
+		<p>총 댓글 수 :  ${book.replycnt} </p>
 	<br><br>
 	<div class="input-group">
 	<span class="input-group-text">댓글 작성</span>

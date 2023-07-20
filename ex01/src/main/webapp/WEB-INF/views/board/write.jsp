@@ -30,11 +30,13 @@
 		
 		
 		// 원래 글 이동 버튼
+		/*
 		btnOrignPost.addEventListener('click', function() {
 			searchForm.action='./view';
 			searchForm.method='get';
 			searchForm.submit();
 		});
+		*/
 		
 	});
 </script>
@@ -54,7 +56,7 @@
 		<form name="searchForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm(this);">
 		<!-- <form name="postForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm(this);"> -->
 		  <!-- 페이지, 검색 정보를 유지하기 위한 input : 추후 hidden처리 필요 -->
-			<input type="text" name="bno" id="bno" value="${param.bno}">
+			
 			<input type="text" name="pageNo" value="${param.pageNo}">
 			<input type="text" name="sField" value="${param.sField}">
 			<input type="text" name="sWord" value="${param.sWord}">
@@ -77,11 +79,12 @@
 		  </div>
 		  <br>
 		  <c:if test="${ empty book.bno }" var="check">
-		  	<button type="submit" class="btn btn-dark" >작성 완료</button>
-			<%-- <button type="submit" class="btn btn-dark" onclick="requestAction('./write', ${book.bno});">작성 완료</button> --%>
+		  	<!-- <button type="submit" class="btn btn-dark" >작성 완료</button> -->
+			<button type="submit" class="btn btn-dark" onclick="requestAction('./write', ${book.bno});">작성 완료</button>
 		  </c:if>
 		  <c:if test="${ not check }">
 		  	<button type="button" class="btn btn-dark" id="btnOrignPost">원래 글로 이동</button>
+		  	<input type="text" name="bno" id="bno" value="${book.bno}">
 		  	<button type="submit" class="btn btn-dark" onclick="requestAction('./edit', ${book.bno});">수정 완료</button>
 		  </c:if>
 		  <button type="reset" class="btn btn-dark">취소</button>

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.mimi.mapper.AttachMapper;
 import com.mimi.mapper.BoardMapper;
+import com.mimi.vo.AttachVO;
 import com.mimi.vo.BoardVO;
 
 import lombok.extern.log4j.Log4j;
@@ -26,6 +28,9 @@ public class boardTest {
 	
 	@Autowired // 주입을 위한 어노테이션
 	BoardMapper bMapper;
+	
+	@Autowired
+	AttachMapper aMapper;
 	
 	@Test
 	public void getList() {
@@ -61,6 +66,16 @@ public class boardTest {
 		board.setTitle("title 101");
 		board.setContent("content 101");
 		board.setWriter("writer 101");
+		
+		
+		AttachVO att = new AttachVO();
+		att.setBno(3);
+		att.setUuid("test_uuid");
+		att.setFileName("test_fileName");
+		att.setUploadPath("test_uploadPath");
+		att.setFiletype("i");
+		
+		aMapper.insert(att);
 		
 		int res = bMapper.insert(board);
 		assertEquals(res, 1);

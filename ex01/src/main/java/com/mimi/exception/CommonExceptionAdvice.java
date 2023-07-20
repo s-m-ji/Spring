@@ -9,7 +9,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import lombok.extern.log4j.Log4j;
 
-// @ControllerAdvice // 예외처리용 어노테이션 // ※※※ RestCommonExceptionAdvice 테스트 해보느라 잠시 어노테이션 주석 처리함
+@ControllerAdvice // 예외처리용 어노테이션 // ※※※ RestCommonExceptionAdvice 테스트 해보느라 잠시 어노테이션 주석 처리함
 @Log4j // 로그 남김용 어노테이션
 public class CommonExceptionAdvice {
 

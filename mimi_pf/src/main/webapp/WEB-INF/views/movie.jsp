@@ -46,16 +46,9 @@
                 
                 //영화 제목 클릭시 영화 정보 출력
                 $("#boxoffice").on("click",".movie", function(){
-                //$("#boxoffice").one("click",".movie", function(){
                     let d = $(this);
                     let movieCd = d.attr("id");
-                    
-                    /*
-                 // 클릭 이벤트가 이미 실행된 경우, 더 이상 처리하지 않음
-                    if (d.data("clicked")) {
-                        return;
-                    }
-                 */
+
                     let url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=a34977bfdaceeb14a018ad5af883c50c&movieCd="+movieCd;
                     
                     $.getJSON(url, function(res){
@@ -65,16 +58,8 @@
                         d.append("감독 : "+movie.directors[0].peopleNm+"<br>");
                         d.append("주연 : "+movie.actors[0].peopleNm+", "+movie.actors[1].peopleNm+", "+movie.actors[2].peopleNm);
                         d.append("<hr>");
-                        
-                       /*
-                     // 클릭 이벤트가 실행되었음을 표시
-                        d.data("clicked", true);
-						*/
-						
+                     
                     });
-                     // 클릭 이벤트를 한 번만 실행하도록 이벤트 핸들러 제거
-                        d.off("click");
-                     // TODO 클릭이 계속 되는데요옵..? 그치만 추후 프론트 구현 시에 클릭으로 상세 화면을 보여줄게 아니기 때문에 이건 패스해도 괜찮을거라 생각쓰 
                 });
                 
                 function getList(){
@@ -148,14 +133,86 @@
                 
             });//ready
         </script>
+        <!-- 
+        <script>
+	    $(document).ready(function() {
+	      var url = 'http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&nation=대한민국';
+	      var queryParams = '?ServiceKey=MFNY08550JVCVDU9909W&val001=2018&val002=01';
+	
+	      $.ajax({
+	        url: url + queryParams,
+	        method: 'GET',
+	        dataType: 'json',
+	        success: function(responseData) {
+	          // 성공적으로 데이터를 받아왔을 때 처리
+	          // responseData는 JSON 객체로 전달됩니다.
+	          console.log(responseData);
+	          // 원하는 방식으로 데이터를 활용하여 출력하면 됩니다.
+	        },
+	        error: function(xhr, status, error) {
+	          // 오류 처리
+	          console.error(status, error);
+	        }
+	      });
+	    });
+	  </script> -->
+	  
+	  <script type="text/javascript">
+	  
+	  var xhr = new XMLHttpRequest(); 
+	  var url = 'http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&nation=대한민국'; 
+	  url = "https://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&ServiceKey=MFNY08550JVCVDU9909W&query='엘리멘탈'";
+	  // 위의 url로 요청하면 정보를 보내주긴함..!
+	  var queryParams = '?' + encodeURIComponent('ServiceKey=MFNY08550JVCVDU9909W'); 
+	  queryParams += '&' + encodeURIComponent('val001') + '=' + encodeURIComponent('2018'); 
+	  queryParams += '&' + encodeURIComponent('val002') + '=' + encodeURIComponent('01'); 
+	  xhr.open('GET', url + queryParams); 
 
+	  xhr.onreadystatechange = function () {
+	    if (this.readyState == 4) {
+	      if (this.status == 200) {
+	        // 요청이 성공하면 데이터를 JSP 페이지로 전달
+	        var responseData = JSON.parse(this.responseText);
+	        var dataToPass = JSON.stringify(responseData);
+	        window.location.href = 'your-jsp-page.jsp?data=' + encodeURIComponent(dataToPass);
+	      } else {
+	        alert('Error: ' + this.status);
+	      }
+	    }
+	  };
+
+	  xhr.send();
+
+	  </script>
+  
 </head>
 <body>
-<input type="date" id="date"><button id="mybtn">확인</button>
-<div id="boxoffice">
-    박스 오피스 순위 <sup>*출처 : 영화진흥위원회</sup> <br>
+	<input type="date" id="date"><button id="mybtn">확인</button>
+	<!-- <div id="boxoffice">
+	    박스 오피스 순위 <sup>*출처 : 영화진흥위원회</sup> <br>
+	</div> -->
+	<div id="boxdetail"></div>
+	
+	<%
+    // 전달된 데이터 파라미터 가져오기
+    String data = request.getParameter("data");
     
-</div>
+    // JSON 데이터를 자바 객체로 파싱
+    // 이때, 반드시 JSON 라이브러리가 필요합니다. (예: JSON.simple 라이브러리 사용)
+    // JSON.simple 라이브러리를 사용할 경우 아래와 같이 데이터를 파싱할 수 있습니다.
+    // org.json.simple.JSONObject 객체를 사용하는 것으로 가정합니다.
+    org.json.simple.JSONObject jsonObject = new org.json.simple.JSONObject();
+    try {
+      org.json.simple.parser.JSONParser parser = new org.json.simple.parser.JSONParser();
+      jsonObject = (org.json.simple.JSONObject) parser.parse(data);
+    } catch (org.json.simple.parser.ParseException e) {
+      e.printStackTrace();
+    }
+    
+    // 여기서부터는 데이터를 활용하여 원하는 방식으로 출력하면 됩니다.
+    // 예시: API로부터 가져온 JSON 데이터의 내용 출력
+    out.println(jsonObject.toJSONString());
+  %>
 </body>
 </html>
 
