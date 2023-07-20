@@ -10,4 +10,6 @@ public interface AttachMapper {
 	
 	public int insert(AttachVO att);
 	
+	public int delete(AttachVO att);
+	
 }

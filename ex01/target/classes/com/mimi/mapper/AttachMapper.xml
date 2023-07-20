@@ -16,4 +16,8 @@
 		(#{uuid}, #{uploadPath}, #{fileName}, #{filetype}, #{bno})
 </insert>
 
+<delete id="delete">
+	DELETE tbl_attach WHERE bno = #{bno} AND uuid = #{uuid}
+</delete>
+
 </mapper>

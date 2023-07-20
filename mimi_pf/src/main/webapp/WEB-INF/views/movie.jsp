@@ -82,20 +82,65 @@
                 	const regex = /-/g;
                     let d_str = d.replace(regex,"")
                 	let url = "http://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=a34977bfdaceeb14a018ad5af883c50c&targetDt="+d_str;
-                    $.getJSON(url, function(data) {
-                        let movieList = data.boxOfficeResult.dailyBoxOfficeList;
-                        $("#boxoffice").empty();
-                        $("#boxoffice").append(d+" 박스 오피스 순위 <sup>*출처 : 영화진흥위원회</sup><br><br>");
-                        for(let i in movieList){
-                            $("#boxoffice").append(
-                            		"<div class='movie' id="+movieList[i].movieCd+">"
-                            		+ (parseInt(i) + 1) 
-                            		+ ". "+movieList[i].movieNm+" / 누적 관객 수 : "
-                            		+ movieList[i].audiAcc+"명</div><hr>"
-                            		);
-                            console.log(movieList[i].movieCd);
-                        }
-                      });
+                    $.getJSON(url, function (data) {
+                    	  let movieList = data.boxOfficeResult.dailyBoxOfficeList;
+                    	  $("#boxoffice").empty();
+                    	  $("#boxoffice").append(
+                    			  
+                    			  
+                    			  
+                    	    "<table><thead><tr><th>#</th><th>박스오피스 유형</th><th>기간</th><th>순위</th><th>순위 변동</th><th>기존/신규</th><th>영화코드</th><th>영화명</th><th>개봉일</th><th>매출액</th><th>매출액 점유율</th><th>매출액 증감</th><th>매출액 변동율</th><th>누적매출액</th><th>관객수</th><th>관객수 증감</th><th>관객수 변동율</th><th>누적관객수</th><th>상영스크린수</th><th>상영횟수</th></tr></thead><tbody>"
+                    	  );
+
+                    	  for (let i in movieList) {
+                    	    $("#boxoffice tbody").append(
+                    	      "<tr><td>" +
+                    	        (parseInt(i) + 1) +
+                    	        "</td><td>" +
+                    	        movieList[i].boxofficeTyp +
+                    	        "</td><td>" +
+                    	        movieList[i].showRange +
+                    	        "</td><td>" +
+                    	        movieList[i].rank +
+                    	        "</td><td>" +
+                    	        movieList[i].rankInten +
+                    	        "</td><td>" +
+                    	        movieList[i].rankOldAndNew +
+                    	        "</td><td>" +
+                    	        movieList[i].movieCd +
+                    	        "</td><td>" +
+                    	        movieList[i].movieNm +
+                    	        "</td><td>" +
+                    	        movieList[i].openDt +
+                    	        "</td><td>" +
+                    	        movieList[i].salesAmt +
+                    	        "</td><td>" +
+                    	        movieList[i].salesShare +
+                    	        "</td><td>" +
+                    	        movieList[i].salesInten +
+                    	        "</td><td>" +
+                    	        movieList[i].salesChange +
+                    	        "</td><td>" +
+                    	        movieList[i].salesAcc +
+                    	        "</td><td>" +
+                    	        movieList[i].audiCnt +
+                    	        "</td><td>" +
+                    	        movieList[i].audiInten +
+                    	        "</td><td>" +
+                    	        movieList[i].audiChange +
+                    	        "</td><td>" +
+                    	        movieList[i].audiAcc +
+                    	        "</td><td>" +
+                    	        movieList[i].scrnCnt +
+                    	        "</td><td>" +
+                    	        movieList[i].showCnt +
+                    	        "</td></tr>"
+                    	    );
+                    	  }
+
+                    	  $("#boxoffice").append("</tbody></table>");
+                    	});
+
                 }
                 
                 // 화면 진입 시 바로 호출
@@ -113,3 +158,22 @@
 </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

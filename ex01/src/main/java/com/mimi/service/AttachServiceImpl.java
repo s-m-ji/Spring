@@ -23,4 +23,13 @@ public class AttachServiceImpl implements AttachService {
 	public int insert(AttachVO att) {
 		return aMapper.insert(att);
 	}
+
+	@Override
+	public int delete(AttachVO att) {
+		// 파일을 진짜 삭제
+		// 파일을 DB에서도 삭제
+		
+		
+		return aMapper.delete(att);
+	}
 }

@@ -122,9 +122,9 @@ public class BoardController {
 	public String writePost(RedirectAttributes rdAttr, BoardVO board) {
 		log.info(board);
 		String msg = "";
-		if(board.getBno()>0) {
-			int res = bService.insert(board);
-			// int res = bService.insertSelectKey(board); 
+		//if(board.getBno()>0) {
+			// int res = bService.insert(board);
+			int res = bService.insertSelectKey(board); 
 			// -> 이렇게하면 board.getBno() 값을 바로 활용할 수 있음
 			// 시퀀스 번호를 조회해서 bno에 먼저 저장해두었기때문에 ! 
 			// * 아래 테스트 시 else 항목도 제대로 나오는지 보려면 
@@ -133,10 +133,11 @@ public class BoardController {
 			if(res>0) {
 				System.out.println("******************** write 성공");
 				msg = board.getBno() + "번 글 write 성공";
-				rdAttr.addFlashAttribute("passMsgWrite" , msg); 
+				rdAttr.addFlashAttribute("passMsgPost" , msg); 
 				rdAttr.addFlashAttribute("book" , board); 
 				// -> addFlash~는 값이 session에 담겨져서 넘어갔다가 새로고침하면 삭제됨
 				log.info(msg);
+				log.info(board);
 				// return "redirect:/board/list";
 			} else {
 				System.out.println("******************** write 실패 : res>0 위배");
@@ -144,13 +145,13 @@ public class BoardController {
 				rdAttr.addFlashAttribute("failMsg" , msg);
 				log.info(msg);
 			}
-		} else {
-			System.out.println("******************** write 실패 : getBno()>0 위배");
+		//} else {
+			//System.out.println("******************** write 실패 : getBno()>0 위배");
 			// msg = board.getBno() + "번 글  write 실패  : getBno()>0 위배";
 			// rdAttr.addFlashAttribute("failMsg" , msg);
-			log.info(msg);
-			return "redirect:/board/write";
-		}
+			//log.info(msg);
+			//return "redirect:/board/write";
+		//}
 		// TODO bno에 ""이 들어갈 경우를 처리해야함
 		return "redirect:/board/message";
 	}

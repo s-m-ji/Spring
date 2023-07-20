@@ -1,49 +1,5 @@
 // window.onload = (e) => {
-	  function rentBook(){
-		 delList = document.querySelectorAll('[name=delNo]:checked');
-		 let delNo = "";
-		 delList.forEach((e)=>{
-			delNo += e.value + ','; 
-		 });
-		 delNo = delNo.substr(0, delNo.length-1);
-		 
-		 console.log(delNo);
-		 
-		 searchForm.action = "../book/rent.book";
-		 searchForm.delNo.value = delNo;
-		 searchForm.submit();
-	 }
-	 
-	 function returnBook(){
-		 delList = document.querySelectorAll('[name=delNo]:checked');
-		 let delNo = "";
-		 delList.forEach((e)=>{
-			delNo += e.value + ','; 
-		 });
-		 delNo = delNo.substr(0, delNo.length-1);
-		 
-		 console.log(delNo);
-		 
-		 searchForm.action = "../book/return.book";
-		 searchForm.delNo.value = delNo;
-		 searchForm.submit();
-	 }
-	 
-	 function basketBook(){
-		 delList = document.querySelectorAll('[name=delNo]:checked');
-		 let delNo = "";
-		 delList.forEach((e)=>{
-			delNo += e.value + ','; 
-		 });
-		 delNo = delNo.substr(0, delNo.length-1);
-		 
-		 console.log(delNo);
-		 
-		 searchForm.action = "../book/mypage.book";
-		 searchForm.delNo.value = delNo;
-		 searchForm.submit();
-	 }
-	 
+	  	 
 	 // ▶▶▶  게시글 삭제 관련
 	 function deleteBook() {
 		 const delList = document.querySelectorAll('[name=bno]:checked');

@@ -2,6 +2,7 @@ package com.mimi.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -10,11 +11,15 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -32,8 +37,8 @@ public class FileUploadController extends CommonRestController {
 	@Autowired
 	AttachService aService;
 	
-	//private static final String ATTACHES_DIR = "C:\\upload\\";
-	private static final String ATTACHES_DIR = "C:\\Users\\user\\git\\Spring\\ex01\\src\\main\\webapp\\resources\\images\\";
+	private static final String ATTACHES_DIR = "C:\\upload\\";
+	// private static final String ATTACHES_DIR = "C:\\Users\\user\\git\\Spring\\ex01\\src\\main\\webapp\\resources\\images\\";
 	
 	@GetMapping("/file/fileupload")
 	public void fileUpload() {
@@ -78,7 +83,27 @@ public class FileUploadController extends CommonRestController {
 	public @ResponseBody Map<String, Object> fileUploadList(@PathVariable("bno") int bno) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", aService.getList(bno));
+		//System.out.println("*****test : " + aService.getList(bno));
 		return map;
+	}
+	
+	
+	// 파일 삭제
+	@GetMapping("/file/delete/{uuid}/{bno}")
+	public @ResponseBody Map<String, Object> fileDelete(
+			@PathVariable("uuid") String uuid, @PathVariable("bno") int bno){
+
+		AttachVO att = new AttachVO();
+		att.setUuid(uuid);
+		att.setBno(bno);
+		
+		int res = aService.delete(att);
+		if(res > 0) {
+			return responseDeleteMap(res);
+		} else {
+			return responseDeleteMap(res);
+		}
+		
 	}
 	
 	
@@ -197,6 +222,54 @@ public class FileUploadController extends CommonRestController {
 		return insertRes;
 	}
 	
+	/**
+	 * 파일 다운로드
+	 * 		컨텐츠 타입을 다운로드 받을 수 있는 형식으로 지정하여
+	 *  	브라우저에서 파일을 다운로드 할 수 있게 처리
+	 * @param fileName
+	 * @return
+	 */
+	@GetMapping("/file/download")
+	public @ResponseBody ResponseEntity<byte[]> download(String fileName){
+						// ResponseEntity 이 친구로 헤더를 직접 설정할 수 있음
+		log.info("download file : " + fileName);
+		
+		HttpHeaders headers = new HttpHeaders();
+		
+		File file = new File(ATTACHES_DIR + fileName);
+		
+		if(file.exists()) {
+			// 컨텐츠 타입을 지정
+			// APPLICATION_OCTET_STREAM 이진 파일(바이너리)의 컨텐츠 유형
+			headers.add("contentType", MediaType.APPLICATION_OCTET_STREAM.toString());
+			
+			// 컨텐츠에 대한 추가 설명 및 파일명 한글 처리
+			try {
+				headers.add("Content-Disposition"
+						, "attachment; filename=\""
+						+ new String(file.getName().getBytes("UTF-8")
+								, "ISO-8859-1") + "\"");
+				System.out.println("********** 파일 다운로드 성공");
+				return new ResponseEntity<>(
+						// FileCopyUtils : 스프링에서 제공해주는 객체
+						FileCopyUtils.copyToByteArray(file), headers, HttpStatus.OK
+						);
+				
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				// 문제가 있을 시 500 오류로 처리
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+		} else { // 파일이 없을 경우 ? 
+			System.out.println("********** 다운로드 할 파일이 없음");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+	}
 	
 }
 

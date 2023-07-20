@@ -51,6 +51,21 @@ public class AttachTest {
 	}
 	
 	@Test
+	public void deleteMapper() {
+		AttachVO att = new AttachVO();
+		att.setBno(6);
+		att.setUuid("test_uuid");
+		att.setFileName("test_fileName");
+		att.setUploadPath("test_uploadPath");
+		att.setFiletype("i");
+		aMapper.insert(att);
+		// ㄴ> DB 손실 방지를 위해서 생성 후 바로 삭제할 수 있도록 테스트함
+		
+		int res = aMapper.delete(att);
+		assertEquals(1, res);
+	}
+	
+	@Test
 	public void insertService() {
 		assertNotNull(aService);
 		
@@ -72,5 +87,22 @@ public class AttachTest {
 		List<AttachVO> list = aService.getList(2);
 		log.info("list : " + list);
 	}
+	
+	@Test
+	public void deleteService() {
+		AttachVO att = new AttachVO();
+		att.setBno(6);
+		att.setUuid("test_uuid");
+		att.setFileName("test_fileName");
+		att.setUploadPath("test_uploadPath");
+		att.setFiletype("i");
+		aService.insert(att);
+		// ㄴ> DB 손실 방지를 위해서 생성 후 바로 삭제할 수 있도록 테스트함
+		
+		int res = aService.delete(att);
+		assertEquals(1, res);
+	}
+	
+	
 	
 }

@@ -11,4 +11,6 @@ public interface AttachService {
 	public List<AttachVO> getList(int bno);
 
 	public int insert(AttachVO att);
+	
+	public int delete(AttachVO att);
 }

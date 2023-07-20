@@ -8,12 +8,12 @@
 <script type="text/javascript">
 	window.addEventListener("load", function(){
 		
-		//  ▶ 파일 목록 조회
+		// 파일 목록 조회
 		btnList.addEventListener("click", function(){
 			getFileList();
 		});
 		
-		//  ▶ 파일 업로드
+		// 파일 업로드
 		btnFetchFU.addEventListener("click", function(){
 			// 웹 개발에서 HTML 폼 데이터를
 			// JavaScript로 쉽게 조작하고 전송하는 방법을 제공하는 API.
@@ -82,55 +82,21 @@
 	function fileuploadRes(map){
 		if(map.result == 'success'){
 			divFileuploadRes.innerHTML += map.msg;
-			divFileuploadRes.innerHTML += "";
-		}
-	}
-	
-	
-	// ▶ 파일 목록 조회 요청
-	function getFileList(){
-		let bno = document.querySelector("#bno").value; 
-		// bno = bno.value; // 변수를 let으로 선언하면 id 속성 값으로 바로 불러올 수 없기에..
-		
-		fetch('/file/list/' + bno)
-			.then(response => response.json())
-			.then(map => viewFileList(map));
-	}
-
-	// ▶ 파일 삭제
-	function attachFileDelete(e){ 
-		/* onclick='attachFileDelete(this) -> e:이벤트로 넘겨옴 */
-		// /file/delete/{uuid}/{bno}
-		(e.dataset.test)? 'true' : 'false'; // 만약 값이 false라면 undefined라고 나옴
-		
-		let bno = e.dataset.bno; 
-		let uuid = e.dataset.uuid; 
-		let test = e.dataset.test; 
-		
-		console.log("bno : ", bno, " | uuid : ", uuid, " | test : ", test);
-		
-		//fetch('/file/delete/'+ uuid + '/' + bno)
-		fetch(`/file/delete/\${uuid}/\${bno}`) 
-			// JSP파일에서는 $ { }이 부분이 EL표현식으로 처리되지 않도록 \역슬래시로 주석 처리가 필요함 ..?
-				// 주석처리 의미를 잘 몰루겟넹.. 특수기호를 인식하기 위함이 아닌가용 ??? TODO 이 부분 검색
-			.then(response => response.json())
-			.then(map => fileDeleteRes(map));
-			//.then(map => console.log("삭제 성공 ! 희희"));
-	}
-	
-	
-	// ▶ 파일 삭제 후 메시지 처리 및 목록 재조회
-	function fileDeleteRes(map){
-		if(map.result == 'success'){
-			console.log(map.msg);
-			divFileupDelMsg.innerText = map.msg;
-			getFileList();
-			
+			// 파일 업로드 성공했으면 글쓰기 폼 전송해서 게시글 등록
 		} else {
 			alert(map.msg);
 		}
 	}
 	
+	
+	function getFileList(){
+		let bno_tset = document.querySelector("#bno").value; 
+		bno = bno.value; // 변수를 let으로 선언하면 id 속성 값으로 바로 불러올 수 없기에..
+		
+		fetch('/file/list/'+bno)
+			.then(response => response.json())
+			.then(map => viewFileList(map));
+	}
 	
 	// 썸네일 이미지가 실제로 존재하는지에 대한 여부를 판단
 	function checkImageExists(imageUrl) {
@@ -148,30 +114,64 @@
 	    });
 	}
 	
+	function attachFileDelete(e){ 
+		/* onclick='attachFileDelete(this) -> e:이벤트로 넘겨옴 */
+		// /file/delete/{uuid}/{bno}
+		(e.dataset.test)? 'true' : 'false'; // 만약 값이 false라면 undefined라고 나옴
+		
+		let bno = e.dataset.bno; 
+		let uuid = e.dataset.uuid; 
+		let test = e.dataset.test; 
+		
+		console.log("bno : ", bno, " | uuid : ", uuid, " | test : ", test);
+		
+		/*
+		fetch('/file/delete/'+ uuid + '/' + bno)
+			.then(response => response.json())
+			.then(map => console.log(map));
+		*/
+	}
 	
-	// ▶ 파일 목록 조회 - 화면 구현
-	async function viewFileList(map){
+	
+	function viewFileList(map){
+	// async function viewFileList(map){
 		console.log('map', map);
 		
 		let content = "";
 		
 		if(map.list.length > 0){
 			for (const item of map.list) {
-			//map.list.forEach( function (item, index) { 
+			// map.list.forEach( function (item, index) { // 대체이미지로 출력해보기 위해서 forEach문 주석 처리함
 				const imageUrl = '/resources/images/' + item.t_savePath;
+				//const imageExists = await checkImageExists(imageUrl);
 				
-				let savePath = encodeURIComponent(item.savePath);
+				// 여기서 백틱으로 쓸 수 없는 이유는 javascript가 아니라 jsp 파일이기 때무넹 !
+				// content += "💾 &nbsp; " + item.fileName +" (파일 경로: " + item.savePath + " )<br>"
+				// + "🔳 &nbsp; " + item.fileName +" (썸네일 경로: " + item.t_savePath + " )<br>"
+				/*
+				content += "<a href='/resources/images/" + item.savePath + "' download='" + item.fileName + "'>"
+							+ "<image alt='썸네일' src='/resources/images/" + item.t_savePath + "'>"
+							+"</a> &nbsp;";
+				*/
 				
+				
+				//if (imageExists) {
 				content += "<a href='/resources/images/" + item.savePath + "' download='" + item.fileName + "'>"
 						+ "<image alt='썸네일' src='" + imageUrl + "'>"
-						+ "</a> &nbsp;"
+						+ "</a> &nbsp;";
 						+ "<i class='bi bi-pencil-square' id='editFile'></i>"
-						+ "<i class='bi bi-x-square' id='deleteFile' onclick='attachFileDelete(this)' data-bno='"+ item.bno +"' data-uuid='"+ item.uuid +"'></i>"
-						
-						+ "<br><a href='/file/download/"+ savePath +"' class='point'>"+ item.fileName +"</a><br>";
-/* 						+ "<br><a href='/file/download?fileName="+ savePath +"' class='point'>"+ item.fileName +"</a><br>"; */
-						// 다운로드 이름은 String 문자열 처리해서 적용해보라고 하셨..! substring "_" 
-				//});
+						+ "<i class='bi bi-x-square' id='deleteFile' onclick='attachFileDelete(this)' data-bno='"+ item.bno +"' data-uuid='"+ item.uuid +"'></i>";
+				
+			/*
+				} else {
+	                // 대체 이미지 태그 생성
+	                const alterImageUrl = '/resources/images/alternative_image.jpg'; // 대체 이미지의 경로
+	                const alterImageAlt = '대체 이미지'; // 대체 이미지의 alt 속성
+
+	                content += "<image alt='" + alterImageAlt + "' src='" + alterImageUrl + "' style='width:100px;'> &nbsp;";
+	            }
+			*/
+			//});
 			}
 		} else {
 			content = "등록된 파일이 없습니당~"
@@ -206,12 +206,12 @@
 			<h3>📋 파일 리스트 조회 📋</h3>
 			
 			아래에 목록 보기 -> <button type="button" id="btnList">조회</button>
-			<div id="divFileupDelMsg"></div>
 			<div id="divFileupload"></div>
 		</div>
 	</main>
 </body>
 </html>
+
 
 
 

@@ -21,11 +21,13 @@
 	}
 	
 	window.addEventListener('load', function(){
+		
 		btnList.addEventListener('click',  function(){
 			searchForm.action='./list';
 			searchForm.method='get';
 			searchForm.submit();
 		});
+		
 		
 		// 원래 글 이동 버튼
 		btnOrignPost.addEventListener('click', function() {
@@ -33,6 +35,7 @@
 			searchForm.method='get';
 			searchForm.submit();
 		});
+		
 	});
 </script>
 </head>
@@ -68,18 +71,21 @@
 			  <textarea class="form-control" name="content" rows="10" style="resize: none;" aria-label="With textarea">${book.content}</textarea>
 		  </div>
 		  <br>
-		  <div class="mb-3">
-			  <input class="form-control" type="file" id="formFile">
+		  <div class="input-group">
+			  <input class="form-control" type="file" name="files" id="formFile">
+			  <!-- 여기서 name="files"이라고 하지않으면 컨트롤러에서 자동 수집을 못 함 ! 유의 -->
 		  </div>
+		  <br>
 		  <c:if test="${ empty book.bno }" var="check">
-		  	<button type="submit" class="btn btn-dark" onclick="requestAction('./write', ${book.bno});">작성 완료</button>
+		  	<button type="submit" class="btn btn-dark" >작성 완료</button>
+			<%-- <button type="submit" class="btn btn-dark" onclick="requestAction('./write', ${book.bno});">작성 완료</button> --%>
 		  </c:if>
 		  <c:if test="${ not check }">
 		  	<button type="button" class="btn btn-dark" id="btnOrignPost">원래 글로 이동</button>
 		  	<button type="submit" class="btn btn-dark" onclick="requestAction('./edit', ${book.bno});">수정 완료</button>
 		  </c:if>
 		  <button type="reset" class="btn btn-dark">취소</button>
-		  <button type="button" class="btn btn-dark" id="btnList" onclick="'">목록 바로가기</button>
+		  <button type="button" class="btn btn-dark" id="btnList" onclick="">목록 바로가기</button>
 <%-- 		  <button type="button" class="btn btn-dark" onclick="location.href='./list?pageNo=${pDto.cri.pageNo}'">목록 바로가기</button> --%>
 		</form>
 	</div>
