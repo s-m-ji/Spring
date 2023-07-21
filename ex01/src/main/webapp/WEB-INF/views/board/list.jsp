@@ -21,7 +21,7 @@
       <div class="bg-light p-5 rounded">
         <h1>📚 목록 보기 📚 </h1>
         <p class="lead"></p>
-        <a class="btn btn-sm btn-dark" href="./write?pageNo=${pDto.cri.pageNo}" role="button" target="_blank">글쓰기</a>
+        <a class="btn btn-sm btn-dark" href="./write" role="button" target="_blank">글쓰기</a>
 <%--         <a class="btn btn-sm btn-dark" href="#" onclick="requestAction('./write', ${pDto.cri.pageNo});" role="button" target="_blank">글쓰기</a> --%>
         <a class="btn btn-sm btn-dark" href="#" role="button" onclick="deleteBook();">선택한 글 삭제하기</a> 
       </div>

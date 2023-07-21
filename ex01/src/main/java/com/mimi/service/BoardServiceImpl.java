@@ -6,11 +6,16 @@ import javax.servlet.jsp.tagext.PageData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mimi.mapper.BoardMapper;
+import com.mimi.mapper.ReplyMapper;
+import com.mimi.vo.AttachVO;
 import com.mimi.vo.BoardVO;
 import com.mimi.vo.Criteria;
+import com.mimi.vo.ReplyVO;
 import com.mimi.vo.pageDto;
 
 /*
@@ -41,6 +46,12 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardMapper bMapper;
+	
+	@Autowired
+	private AttachService aService;
+	
+	@Autowired
+	private ReplyMapper rMapper;
 
 	@Override
 	public void getListXml(Model model, Criteria cri) {
@@ -68,9 +79,17 @@ public class BoardServiceImpl implements BoardService {
 		return bMapper.insert(board);
 	}
 
+	@Transactional(rollbackFor = Exception.class) 
+	// 파일 등록 중 오류 발생 시 글쓰기도 실패 처리 되도록 !
 	@Override
-	public int insertSelectKey(BoardVO board) {
-		return bMapper.insertSelectKey(board);
+	public int insertSelectKey(BoardVO board, List<MultipartFile> files) throws Exception {
+		// 게시물 등록
+		int res = bMapper.insertSelectKey(board);
+		// 파일 첨부
+		aService.fileupload(files, board.getBno());
+		// 파일 첨부 중에 오류가 발생할 경우 ? : Impl과 같은 클래스에서는 throws로 넘김 -> 해당 메소드를 호출한 곳으로 패스함
+		// 최종적으로는 컨트롤러에서 처리하도록 설정해두었음
+		return res;
 	}
 
 	@Override
@@ -78,14 +97,40 @@ public class BoardServiceImpl implements BoardService {
 		return bMapper.getOne(bno);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int update(BoardVO board) {		
-		return bMapper.update(board);
+	public int update(BoardVO board, List<MultipartFile> files) throws Exception {	
+		int res = bMapper.update(board);
+		aService.fileupload(files, board.getBno());
+		return res;
 	}
 
 	@Override
-	public int delete(int bno) {
-		return bMapper.delete(bno);
+	@Transactional(rollbackFor = Exception.class)
+	public int delete(int bno, Criteria cri) {
+		// 게시물 삭제 시 댓글, 첨부된 파일이 있는 경우 오류 발생
+		// -> 게시물 삭제 시 댓글 및 첨부파일이 모두 삭제 된다는 알림을 띄우고
+		// 확인 버튼 클릭하면 모두 삭제 처리
+		
+		// 1. 첨부파일 리스트 조회하면서 삭제
+		List<AttachVO> aList = aService.getList(bno);
+		int res = 0;
+		for(AttachVO vo : aList) {
+			res += aService.delete(vo);
+		}
+		System.out.println("첨부파일 삭제 처리 건수 : " + res);
+		// 2. 댓글 삭제
+		List<ReplyVO> rList = rMapper.getList(bno, cri);
+		for(ReplyVO vo : rList) {
+			res += rMapper.delete(vo.getRn());
+		}
+		
+		System.out.println("댓글 삭제 처리 건수 : " + res);
+		
+		bMapper.delete(bno);
+		
+		// 3. 게시글 삭제
+		return res;
 	}
 
 	@Override

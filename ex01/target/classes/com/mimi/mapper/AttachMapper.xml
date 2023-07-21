@@ -20,4 +20,11 @@
 	DELETE tbl_attach WHERE bno = #{bno} AND uuid = #{uuid}
 </delete>
 
+<select id="getOne" resultType="com.mimi.vo.AttachVO">
+	SELECT T.* 
+    , uploadpath||uuid||'_'||filename savepath
+     , DECODE(filetype , 'I', uploadpath||'thum_'||uuid||'_'||filename, 'file') t_savepath
+ 			FROM tbl_attach T WHERE bno = #{bno} AND uuid = #{uuid}
+</select>
+
 </mapper>

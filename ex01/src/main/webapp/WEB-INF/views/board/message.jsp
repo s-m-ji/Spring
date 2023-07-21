@@ -6,10 +6,10 @@
 <meta charset="UTF-8">
 <!-- CSS only -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-<title>Insert title here</title>
+<title>message.jsp</title>
 <script>
   let passMsg = "${passMsg}";
-  let failMsg = "${failMsg}";
+  let failMsg = "${param.failMsg}";
   let passMsgPost = "${param.passMsgPost}"; // param. 이라고 명시하지않으면 내장객체(4가지 스코프 영역)에 저장된 값에서 찾아오는 것이므로 유의 !
   
   // window.onload = function() {

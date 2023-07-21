@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src='/resources/js/file.js'></script>
 <title>write.jsp</title>
 <script>
 	function validateForm(form){
@@ -30,14 +31,28 @@
 		
 		
 		// 원래 글 이동 버튼
-		/*
 		btnOrignPost.addEventListener('click', function() {
 			searchForm.action='./view';
 			searchForm.method='get';
 			searchForm.submit();
 		});
-		*/
 		
+		function getFileList(){
+			let bno = '${book.bno}'; 
+			console.log('비엔오 ~ ' + bno);
+			
+			if(bno){ // bno 값이 있을 때만 글쓰기/수정 화면에서 파일 목록이 출력될 수 있도록 함
+				// 사실 이 부분은 내가 아래 jps에서 < c : if 코드 안에 넣어두어서 이중으로 처리하는 것 같긴 함..!
+				
+			fetch('/file/list/' + bno)
+				.then(response => response.json())
+				.then(map => viewFileList(map));
+			}
+		}
+		
+		// 파일 출력
+		getFileList();
+
 	});
 </script>
 </head>
@@ -57,16 +72,13 @@
 		<!-- <form name="postForm" method="post" enctype="multipart/form-data" onsubmit="return validateForm(this);"> -->
 		  <!-- 페이지, 검색 정보를 유지하기 위한 input : 추후 hidden처리 필요 -->
 			
-			<input type="text" name="pageNo" value="${param.pageNo}">
+			<%-- <input type="text" name="pageNo" value="${param.pageNo == ''? '1' : param.pageNo}"> --%>
+			<input type="text" name="pageNo" value="<c:if test='${ empty param.pageNo }' var='pNo'>1</c:if><c:if test='${ not pNo}'>${param.pageNo}</c:if>"> 
 			<input type="text" name="sField" value="${param.sField}">
 			<input type="text" name="sWord" value="${param.sWord}">
 		  <div class="input-group mb-3">
 			  <span class="input-group-text" id="basic-addon1">제목</span>
 			  <input type="text" name="title" value="${book.title}" class="form-control" aria-label="title" aria-describedby="basic-addon1">
-		  </div>
-		  <div class="input-group mb-3">
-			  <span class="input-group-text" id="basic-addon1">작가</span>
-			  <input type="text" name="writer" value="${book.writer}" class="form-control" aria-label="writer" aria-describedby="basic-addon1">
 		  </div>
 		  <div class="input-group">
 			  <span class="input-group-text">내용</span>
@@ -74,15 +86,28 @@
 		  </div>
 		  <br>
 		  <div class="input-group">
-			  <input class="form-control" type="file" name="files" id="formFile">
+			  <input class="form-control" type="file" name="files" id="formFile" multiple="multiple">
 			  <!-- 여기서 name="files"이라고 하지않으면 컨트롤러에서 자동 수집을 못 함 ! 유의 -->
 		  </div>
 		  <br>
+		  <!-- 등록 화면일 때 -->
+		  <c:if test="${not empty book.writer}">
+		  	<div class="input-group mb-3">
+			  <span class="input-group-text" id="basic-addon1">작성자</span>
+			  <input type="text" name="userWriter" value="${userId}" class="form-control">
+		  </div>
+		  </c:if>
 		  <c:if test="${ empty book.bno }" var="check">
 		  	<!-- <button type="submit" class="btn btn-dark" >작성 완료</button> -->
 			<button type="submit" class="btn btn-dark" onclick="requestAction('./write', ${book.bno});">작성 완료</button>
 		  </c:if>
 		  <c:if test="${ not check }">
+		  
+		  <div class="input-group mb-3 ">
+					<span class="input-group-text" id="basic-addon1">등록된 파일</span>
+					<div id="fileDiv" class="form-control">!!!!! 파일 !!!!!</div>
+				</div>
+		  <br>
 		  	<button type="button" class="btn btn-dark" id="btnOrignPost">원래 글로 이동</button>
 		  	<input type="text" name="bno" id="bno" value="${book.bno}">
 		  	<button type="submit" class="btn btn-dark" onclick="requestAction('./edit', ${book.bno});">수정 완료</button>

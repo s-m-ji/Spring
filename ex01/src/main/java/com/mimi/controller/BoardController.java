@@ -24,16 +24,15 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping("/board/*")
 @Log4j
-public class BoardController extends FileUploadController {
+public class BoardController {
+	// public class BoardController extends FileUploadController {
 	
 	@Autowired
 	BoardService bService;
 	
-	@Autowired
-	AttachService aSerivce;
-	
 	//@Autowired
-	//AttachService aService;
+	//AttachService aSerivce;
+
 	
 	@GetMapping("/reply/test")
 	public String test() {
@@ -123,22 +122,16 @@ public class BoardController extends FileUploadController {
 	 * addFlashAttribute : 세션에 저장 후 페이지를 전환
 	 */
 	@PostMapping("write")
-	public String writePost(RedirectAttributes rdAttr, BoardVO board, List<MultipartFile> files) {
+	public String writePost(RedirectAttributes rdAttr, BoardVO board
+								, List<MultipartFile> files, Model model) {
 		log.info(board);
 		String msg = "";
-		//if(board.getBno()>0) {
-			// int res = bService.insert(board);
-			int res = bService.insertSelectKey(board); 
+		
+		// int res = bService.insert(board);
+		int res;
+		try {
+			res = bService.insertSelectKey(board, files);
 			
-			// 등록 시 해당 글에 첨부 파일도 같이 등록
-			fileupload(files, board.getBno());
-			
-			
-			// -> 이렇게하면 board.getBno() 값을 바로 활용할 수 있음
-			// 시퀀스 번호를 조회해서 bno에 먼저 저장해두었기때문에 ! 
-			// * 아래 테스트 시 else 항목도 제대로 나오는지 보려면 
-			// if 조건에서 간단히 (res<0) 이렇게 해서 똑같이 작업해볼 수도 있당 
-			// 다만 값을 다 잘 맞춰주면 결과는 fail이어도 실제로는 등록이 되기때문에 유념 ! 
 			if(res>0) {
 				System.out.println("******************** write 성공");
 				msg = board.getBno() + "번 글 write 성공";
@@ -154,14 +147,45 @@ public class BoardController extends FileUploadController {
 				rdAttr.addFlashAttribute("failMsg" , msg);
 				log.info(msg);
 			}
-		//} else {
-			//System.out.println("******************** write 실패 : getBno()>0 위배");
-			// msg = board.getBno() + "번 글  write 실패  : getBno()>0 위배";
-			// rdAttr.addFlashAttribute("failMsg" , msg);
-			//log.info(msg);
-			//return "redirect:/board/write";
-		//}
-		// TODO bno에 ""이 들어갈 경우를 처리해야함
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			log.info(e.getMessage());
+			
+			if(e.getMessage().indexOf("첨부파일")>-1) {
+				model.addAttribute("failMsg", e.getMessage());
+			} else {
+				model.addAttribute("failMsg", "등록 중 예외 발생 !");
+			}
+		} 
+		// -> 이렇게하면 board.getBno() 값을 바로 활용할 수 있음
+		// 시퀀스 번호를 조회해서 bno에 먼저 저장해두었기때문에 ! 
+		
+		// 등록 시 해당 글에 첨부 파일도 같이 등록
+		// fileupload(files, board.getBno());
+		
+		// * 아래 테스트 시 else 항목도 제대로 나오는지 보려면 
+		// if 조건에서 간단히 (res<0) 이렇게 해서 똑같이 작업해볼 수도 있당 
+		// 다만 값을 다 잘 맞춰주면 결과는 fail이어도 실제로는 등록이 되기때문에 유념 ! 
+		/*
+		if(res>0) {
+			System.out.println("******************** write 성공");
+			msg = board.getBno() + "번 글 write 성공";
+			rdAttr.addFlashAttribute("passMsg" , msg); 
+			rdAttr.addFlashAttribute("book" , board); 
+			// -> addFlash~는 값이 session에 담겨져서 넘어갔다가 새로고침하면 삭제됨
+			log.info(msg);
+			log.info(board);
+			// return "redirect:/board/list";
+		} else {
+			System.out.println("******************** write 실패 : res>0 위배");
+			msg = board.getBno() + "번 글  write 실패  : res>0 위배";
+			rdAttr.addFlashAttribute("failMsg" , msg);
+			log.info(msg);
+		}
+		*/
+			
 		return "redirect:/board/message";
 	}
 	
@@ -180,7 +204,7 @@ public class BoardController extends FileUploadController {
 	 */
 	@PostMapping("edit")
 	public String editPost(RedirectAttributes rdAttr, List<MultipartFile> files,
-								BoardVO board, Criteria cri) {
+								BoardVO board, Criteria cri)  {
 		// pageNo를 쓰기 위해 매개변수에 Criteria 사용하여 파라미터를 자동 수집함
 		
 		// ?pageNo=1
@@ -189,39 +213,55 @@ public class BoardController extends FileUploadController {
 		
 		// request.getAttribute("pageNo");
 		// ${pageNo}
-		int res = bService.update(board); 
+		int res;
+		String msg = "";
+		try {
+			res = bService.update(board, files);
+			
+			if(res>0) {
+				System.out.println("******************** edit 성공");
+				 msg = board.getBno() + "번 글 edit 성공";
+				 
+				 // session에 저장되었다가 사라짐
+				 // rdAttr.addFlashAttribute("passMsgPost" , msg); 
+				 // rdAttr.addFlashAttribute("book" , board);
+				 
+				 // 파라미터로 넘겨주는 것
+				/* rdAttr.addAttribute("book" , board); */
+				 
+				 rdAttr.addAttribute("bno" , board.getBno());
+				 rdAttr.addAttribute("pageNo" , cri.getPageNo());
+				 rdAttr.addAttribute("sField" , cri.getSField());
+				 rdAttr.addAttribute("sWord" , cri.getSWord());
+				 
+				 rdAttr.addAttribute("passMsgPost" , msg); 
+				 log.info(board);
+				 System.out.println("res : " + res);
+			} else {
+				System.out.println("******************** edit 실패");
+				msg = board.getBno() + "번 글  edit 실패";
+				// rdAttr.addFlashAttribute("failMsg" , msg);
+				rdAttr.addAttribute("failMsg" , msg);
+				log.debug(board);
+				System.out.println("res : " + res);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			log.info(e.getMessage());
+			
+			if(e.getMessage().indexOf("첨부파일")>-1) {
+				rdAttr.addAttribute("failMsg", e.getMessage());
+			} else {
+				rdAttr.addAttribute("failMsg", "등록 중 예외 발생 !");
+			}
+		} 
 		
 		// 수정 시 파일도 함께 수정하여 올릴 수 있도록
-		fileupload(files, board.getBno());
+		// fileupload(files, board.getBno());
 		
-		String msg = "";
-		if(res>0) {
-			System.out.println("******************** edit 성공");
-			 msg = board.getBno() + "번 글 edit 성공";
-			 
-			 // session에 저장되었다가 사라짐
-			 // rdAttr.addFlashAttribute("passMsgPost" , msg); 
-			 // rdAttr.addFlashAttribute("book" , board);
-			 
-			 // 파라미터로 넘겨주는 것
-			/* rdAttr.addAttribute("book" , board); */
-			 
-			 rdAttr.addAttribute("bno" , board.getBno());
-			 rdAttr.addAttribute("pageNo" , cri.getPageNo());
-			 rdAttr.addAttribute("sField" , cri.getSField());
-			 rdAttr.addAttribute("sWord" , cri.getSWord());
-			 
-			 rdAttr.addAttribute("passMsgPost" , msg); 
-			 log.info(board);
-			 System.out.println("res : " + res);
-		} else {
-			System.out.println("******************** edit 실패");
-			msg = board.getBno() + "번 글  edit 실패";
-			// rdAttr.addFlashAttribute("failMsg" , msg);
-			rdAttr.addAttribute("failMsg" , msg);
-			log.debug(board);
-			System.out.println("res : " + res);
-		}
+		
 		
 		// redirect 시 request 영역에 저장되지 않기 때문에  RedirectAttributes를 이용해서 값을 보내기
 		return "redirect:/board/message";
@@ -251,12 +291,13 @@ public class BoardController extends FileUploadController {
 	*/
 	
 	@GetMapping("delete")
-	public String deletePost(RedirectAttributes rdAttr, @RequestParam("bno") List<Integer> delList) {
+	public String deletePost(RedirectAttributes rdAttr, Criteria cri
+			, @RequestParam("bno") List<Integer> delList) {
 	    StringBuilder msg = new StringBuilder();
 	    int passCnt = 0;
 
 	    for (int bno : delList) {
-	        if (bService.delete(bno) > 0) {
+	        if (bService.delete(bno, cri) > 0) {
 	            System.out.println("******************** delete 성공");
 	            msg.append(bno).append(",");
 	            passCnt++;
